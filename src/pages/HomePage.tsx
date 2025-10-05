@@ -51,7 +51,7 @@ export function HomePage() {
 
       {/* Mapa */}
       <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-        <div className="h-[600px] relative">
+        <div className="h-[600px] w-full relative">
           <FarmMap
             showRescueOnly={showRescueOnly}
             onFarmSelect={setSelectedFarm}

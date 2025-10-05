@@ -1,11 +1,12 @@
 // src/components/maps/FarmMap.tsx - POPRAWIONA WERSJA
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { useFarms } from "@/hooks/useFarms";
 import { FarmPopup } from "./FarmPopup";
 import { MapControls } from "./MapControls";
 import { RescueListings } from "./RescueListings";
 import { getFarmCoordinates, type Farm } from "@/types/map";
+import "leaflet/dist/leaflet.css";
 
 // Domyślne centrum - Polska
 const DEFAULT_CENTER: [number, number] = [52.0, 19.0];
@@ -28,6 +29,20 @@ function MapViewUpdater({
   return null;
 }
 
+// Hook do obsługi resize mapy
+function MapResizer() {
+  const map = useMap();
+
+  useEffect(() => {
+    // Wymuś odświeżenie mapy po renderze
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 100);
+  }, [map]);
+
+  return null;
+}
+
 interface FarmMapProps {
   showRescueOnly?: boolean;
   onFarmSelect?: (farm: Farm) => void;
@@ -42,12 +57,15 @@ export function FarmMap({
     center: DEFAULT_CENTER,
     zoom: DEFAULT_ZOOM,
   });
+  const [mapReady, setMapReady] = useState(false);
+  const mapRef = useRef<L.Map | null>(null);
 
   console.log("FarmMap - Status:", {
     isLoading,
     error,
     farmsCount: farms?.length,
-  }); // Debug
+    mapReady,
+  });
 
   // Filtrowanie gospodarstw - tylko z "akcjami ratunkowymi"
   const filteredFarms = showRescueOnly
@@ -64,8 +82,26 @@ export function FarmMap({
       coords.lng !== undefined &&
       coords.lat !== 0 &&
       coords.lng !== 0
-    ); // Filtruj (0,0)
+    );
   });
+
+  // Efekt dla inicjalizacji mapy
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setMapReady(true);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Efekt dla invalidate size gdy mapa jest gotowa
+  useEffect(() => {
+    if (mapReady && mapRef.current) {
+      setTimeout(() => {
+        mapRef.current?.invalidateSize();
+      }, 100);
+    }
+  }, [mapReady]);
 
   if (isLoading) {
     return (
@@ -108,33 +144,52 @@ export function FarmMap({
       {showRescueOnly && <RescueListings farms={filteredFarms || []} />}
 
       {/* Główna mapa */}
-      <MapContainer
-        center={viewport.center}
-        zoom={viewport.zoom}
-        style={{ height: "100%", width: "100%" }}
-        className="rounded-lg z-0"
-        scrollWheelZoom={true}
-      >
-        <MapViewUpdater center={viewport.center} zoom={viewport.zoom} />
+      <div className="h-full w-full">
+        <MapContainer
+          center={viewport.center}
+          zoom={viewport.zoom}
+          style={{ height: "100%", width: "100%" }}
+          className="rounded-lg z-0"
+          scrollWheelZoom={true}
+          ref={mapRef}
+          whenReady={() => {
+            setMapReady(true);
+            setTimeout(() => {
+              mapRef.current?.invalidateSize();
+            }, 100);
+          }}
+        >
+          <MapResizer />
+          <MapViewUpdater center={viewport.center} zoom={viewport.zoom} />
 
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+          {/* <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            // Alternatywne TileLayery jeśli główny nie działa:
+            // url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+          /> */}
+          <TileLayer
+            url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>'
+          />
 
-        {/* Markery gospodarstw */}
-        {farmsWithValidCoordinates?.map((farm) => {
-          const coordinates = getFarmCoordinates(farm);
+          {/* Markery gospodarstw */}
+          {farmsWithValidCoordinates?.map((farm) => {
+            const coordinates = getFarmCoordinates(farm);
 
-          return (
-            <Marker key={farm.id} position={[coordinates.lat, coordinates.lng]}>
-              <Popup>
-                <FarmPopup farm={farm} onSelect={onFarmSelect} />
-              </Popup>
-            </Marker>
-          );
-        })}
-      </MapContainer>
+            return (
+              <Marker
+                key={farm.id}
+                position={[coordinates.lat, coordinates.lng]}
+              >
+                <Popup>
+                  <FarmPopup farm={farm} onSelect={onFarmSelect} />
+                </Popup>
+              </Marker>
+            );
+          })}
+        </MapContainer>
+      </div>
 
       {/* Komunikat jeśli brak gospodarstw */}
       {farmsWithValidCoordinates?.length === 0 && !isLoading && (
