@@ -7,10 +7,10 @@ import { MapControls } from "./MapControls";
 import { RescueListings } from "./RescueListings";
 import { getFarmCoordinates, type Farm } from "@/types/map";
 import "leaflet/dist/leaflet.css";
+import { LatLngBounds } from "leaflet";
+import { ReliableTileLayer } from "./ReliableTileLayer";
 
 // Domyślne centrum - Polska
-const DEFAULT_CENTER: [number, number] = [52.0, 19.0];
-const DEFAULT_ZOOM = 6;
 
 // Custom hook do obsługi zmiany widoku mapy
 function MapViewUpdater({
@@ -48,14 +48,17 @@ interface FarmMapProps {
   onFarmSelect?: (farm: Farm) => void;
 }
 
+const DEFAULT_CENTER: [number, number] = [52.0, 19.0];
+const DEFAULT_ZOOM = 6;
+
 export function FarmMap({
   showRescueOnly = false,
   onFarmSelect,
 }: FarmMapProps) {
   const { data: farms, isLoading, error } = useFarms();
   const [viewport, setViewport] = useState({
-    center: DEFAULT_CENTER,
-    zoom: DEFAULT_ZOOM,
+    center: [52.0, 19.0],
+    zoom: 6,
   });
   const [mapReady, setMapReady] = useState(false);
   const mapRef = useRef<L.Map | null>(null);
@@ -84,6 +87,36 @@ export function FarmMap({
       coords.lng !== 0
     );
   });
+
+  const POLAND_BOUNDS = new LatLngBounds([49.0, 14.12], [54.83, 24.15]);
+
+  const DEFAULT_CENTER: [number, number] = [52.0, 19.0];
+  const DEFAULT_ZOOM = 6;
+
+  function PolandBoundsEnforcer() {
+    const map = useMap();
+
+    useEffect(() => {
+      map.setMaxBounds(POLAND_BOUNDS);
+      map.setMinZoom(6);
+      map.setMaxZoom(14);
+
+      // Jeśli mapa jest poza Polską, wróć do centrum
+      const checkBounds = () => {
+        if (!POLAND_BOUNDS.contains(map.getCenter())) {
+          map.setView(DEFAULT_CENTER, DEFAULT_ZOOM);
+        }
+      };
+
+      map.on("drag", checkBounds);
+
+      return () => {
+        map.off("drag", checkBounds);
+      };
+    }, [map]);
+
+    return null;
+  }
 
   // Efekt dla inicjalizacji mapy
   useEffect(() => {
@@ -146,32 +179,34 @@ export function FarmMap({
       {/* Główna mapa */}
       <div className="h-full w-full">
         <MapContainer
-          center={viewport.center}
-          zoom={viewport.zoom}
+          center={DEFAULT_CENTER}
+          zoom={DEFAULT_ZOOM}
           style={{ height: "100%", width: "100%" }}
           className="rounded-lg z-0"
           scrollWheelZoom={true}
-          ref={mapRef}
-          whenReady={() => {
-            setMapReady(true);
-            setTimeout(() => {
-              mapRef.current?.invalidateSize();
-            }, 100);
-          }}
+          maxBounds={POLAND_BOUNDS}
+          maxBoundsViscosity={0.8}
+          minZoom={6}
+          maxZoom={14}
         >
           <MapResizer />
           <MapViewUpdater center={viewport.center} zoom={viewport.zoom} />
 
+          <PolandBoundsEnforcer />
+
           {/* <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            // Alternatywne TileLayery jeśli główny nie działa:
-            // url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            bounds={POLAND_BOUNDS}
+            noWrap={true}
           /> */}
-          <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>'
-          />
+
+          {/* <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://openstreetmap.org">OpenStreetMap</a>'
+          /> */}
+
+          <ReliableTileLayer />
 
           {/* Markery gospodarstw */}
           {farmsWithValidCoordinates?.map((farm) => {

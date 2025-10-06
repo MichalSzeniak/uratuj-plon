@@ -1,4 +1,3 @@
-// src/components/modals/AddFarmModal.tsx
 import { AddFarmForm } from "../forms/AddFarmForm";
 
 interface AddFarmModalProps {
