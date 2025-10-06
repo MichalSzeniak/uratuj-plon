@@ -1,148 +1,174 @@
-import type { Farm } from "@/types/map";
 import { Link } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { useState } from "react";
 
 interface FarmPopupProps {
-  farm: Farm;
-  onSelect?: (farm: Farm) => void;
+  listing: any;
+  onSelect?: (listing: any) => void;
 }
 
-export function FarmPopup({ farm, onSelect }: FarmPopupProps) {
-  const hasRescueListings = farm.listings?.some(
-    (l) => l.price_type === "rescue"
-  );
-  const activeListings =
-    farm.listings?.filter((l) => l.status === "active") || [];
-
+export function FarmPopup({ listing, onSelect }: FarmPopupProps) {
+  const [showDetails, setShowDetails] = useState(false);
   const handleSelect = () => {
     if (onSelect) {
-      onSelect(farm);
+      onSelect(listing);
     }
   };
 
   return (
-    <div className="min-w-[250px] max-w-[300px]">
-      {/* Nagłówek */}
+    <div className="min-w-[280px] max-w-[320px]">
       <div className="flex items-start justify-between mb-3">
         <div>
-          <h3 className="font-semibold text-gray-900 text-base">{farm.name}</h3>
-          {farm.is_verified && (
-            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-              ✅ Zweryfikowane
-            </span>
-          )}
+          <h3 className="font-semibold text-gray-900 text-base leading-tight">
+            {listing.title}
+          </h3>
+          <div className="flex items-center gap-2 mt-1">
+            <Badge variant="secondary" className="text-xs">
+              {listing.user?.full_name || listing.user?.username || "Anonim"}
+            </Badge>
+            {listing.price_type === "rescue" && (
+              <Badge variant="destructive" className="text-xs">
+                🚨 Ratunkowe
+              </Badge>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Zdjęcie (jeśli istnieje) */}
-      {farm.images && farm.images.length > 0 && (
+      {listing.images && listing.images.length > 0 && (
         <div className="mb-3">
           <img
-            src={farm.images[0]}
-            alt={farm.name}
-            className="w-full h-24 object-cover rounded-lg"
+            src={listing.images[0]}
+            alt={listing.title}
+            className="w-full h-32 object-cover rounded-lg"
           />
         </div>
       )}
 
-      {/* Informacje podstawowe */}
       <div className="space-y-2 mb-3">
         <p className="text-sm text-gray-600 line-clamp-2">
-          {farm.description || "Brak opisu"}
+          {listing.description || "Brak opisu"}
         </p>
 
-        {farm.address && (
+        {listing.address && (
           <p className="text-xs text-gray-500 flex items-center">
-            📍 {farm.address}
-          </p>
-        )}
-
-        {farm.contact_phone && (
-          <p className="text-xs text-gray-500 flex items-center">
-            📞 {farm.contact_phone}
+            📍 {listing.address}
           </p>
         )}
       </div>
 
-      {/* Aktywne ogłoszenia */}
-      {activeListings.length > 0 && (
-        <div className="mb-3">
-          <h4 className="text-xs font-medium text-gray-700 mb-1">
-            Dostępne produkty:
-          </h4>
-          <div className="space-y-1">
-            {activeListings.slice(0, 3).map((listing) => (
-              <div
-                key={listing.id}
-                className="flex justify-between items-center text-xs"
-              >
-                <span className="text-gray-600">{listing.title}</span>
-                <span
-                  className={`font-medium ${
-                    listing.price_type === "rescue"
-                      ? "text-red-600"
-                      : "text-green-600"
-                  }`}
-                >
-                  {listing.price_per_unit
-                    ? `${listing.price_per_unit} zł/${listing.unit}`
-                    : "Za darmo"}
-                </span>
-              </div>
-            ))}
-            {activeListings.length > 3 && (
+      <Card className="mb-3">
+        <CardContent className="p-3">
+          <div className="flex justify-between items-center">
+            <div>
+              <span className="text-sm font-medium text-gray-900">
+                {listing.price_per_unit
+                  ? `${listing.price_per_unit} zł/${listing.unit}`
+                  : "Za darmo"}
+              </span>
+              {listing.estimated_amount && (
+                <p className="text-xs text-gray-500">
+                  Szacowana ilość: {listing.estimated_amount} {listing.unit}
+                </p>
+              )}
+            </div>
+            <div className="text-right">
               <p className="text-xs text-gray-500">
-                +{activeListings.length - 3} więcej...
+                Od:{" "}
+                {new Date(listing.available_from).toLocaleDateString("pl-PL")}
               </p>
-            )}
+              {listing.available_until && (
+                <p className="text-xs text-gray-500">
+                  Do:{" "}
+                  {new Date(listing.available_until).toLocaleDateString(
+                    "pl-PL"
+                  )}
+                </p>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        </CardContent>
+      </Card>
 
-      {/* Znacznik akcji ratunkowej */}
-      {hasRescueListings && (
-        <div className="mb-3 p-2 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-xs font-medium text-red-800 text-center">
-            🚨 Akcja ratunkowa dostępna!
+      {listing.pickup_instructions && (
+        <div className="mb-3 p-2 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-xs font-medium text-blue-800 mb-1">
+            📋 Instrukcje odbioru:
           </p>
+          <p className="text-xs text-blue-700">{listing.pickup_instructions}</p>
         </div>
       )}
 
-      {/* Przyciski akcji */}
+      {listing.rescue_reason && (
+        <div className="mb-3 p-2 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-xs font-medium text-red-800 mb-1">
+            ⚠️ Powód akcji ratunkowej:
+          </p>
+          <p className="text-xs text-red-700">{listing.rescue_reason}</p>
+        </div>
+      )}
+
+      {showDetails && (
+        <div className="mt-3 space-y-2 border-t pt-3">
+          <div className="grid grid-cols-2 gap-2 text-xs">
+            <div>
+              <span className="font-medium">Typ produktu:</span>
+              <p className="text-gray-600 capitalize">{listing.product_type}</p>
+            </div>
+            <div>
+              <span className="font-medium">Status:</span>
+              <p className="text-gray-600">
+                {listing.status === "active" ? "Aktywne" : "Oczekujące"}
+              </p>
+            </div>
+          </div>
+
+          {/* Kontakt */}
+          {listing.user && (
+            <div className="bg-gray-50 p-2 rounded">
+              <p className="text-xs font-medium">Kontakt:</p>
+              <p className="text-xs text-gray-600">{listing.user.full_name}</p>
+            </div>
+          )}
+        </div>
+      )}
+      <div className="flex space-x-2 mt-3">
+        <Link
+          to={`/listing/${listing.id}`}
+          className="flex-1 bg-green-600 text-white text-center py-2 px-3 rounded-lg text-sm hover:bg-green-700 transition-colors"
+          onClick={() => onSelect?.(listing)}
+        >
+          Zobacz szczegóły
+        </Link>
+
+        <button
+          onClick={() => setShowDetails(!showDetails)}
+          className="bg-gray-200 text-gray-700 p-2 rounded-lg text-sm hover:bg-gray-300 transition-colors"
+          title="Pokaż więcej informacji"
+        >
+          {showDetails ? "▲" : "▼"}
+        </button>
+      </div>
+
+      <div className="flex space-x-1 mt-2">
+        <button className="flex-1 bg-blue-500 text-white text-xs py-1 px-2 rounded hover:bg-blue-600 transition-colors">
+          📞 Zadzwoń
+        </button>
+        <button className="flex-1 bg-orange-500 text-white text-xs py-1 px-2 rounded hover:bg-orange-600 transition-colors">
+          📧 Wiadomość
+        </button>
+      </div>
+
       <div className="flex space-x-2">
         <Link
-          to={`/farm/${farm.id}`}
-          className="flex-1 bg-green-500 text-white text-center py-2 px-3 rounded-lg text-sm hover:bg-green-600 transition-colors"
+          to={`/listing/${listing.id}`}
+          className="flex-1 bg-green-600 text-white text-center py-2 px-3 rounded-lg text-sm hover:bg-green-700 transition-colors"
           onClick={handleSelect}
         >
           Zobacz szczegóły
         </Link>
       </div>
-
-      {/* Rolnik */}
-      {farm.profiles && (
-        <div className="mt-2 pt-2 border-t border-gray-200">
-          <div className="flex items-center space-x-2">
-            {farm.profiles.avatar_url ? (
-              <img
-                src={farm.profiles.avatar_url}
-                alt="Avatar"
-                className="w-6 h-6 rounded-full"
-              />
-            ) : (
-              <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center">
-                <span className="text-xs text-gray-600">
-                  {farm.profiles.full_name?.charAt(0) ||
-                    farm.profiles.username?.charAt(0) ||
-                    "R"}
-                </span>
-              </div>
-            )}
-            <span className="text-xs text-gray-600">
-              {farm.profiles.full_name || farm.profiles.username}
-            </span>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

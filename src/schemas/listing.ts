@@ -1,14 +1,16 @@
-// src/schemas/listing.ts - UAKTUALNIONA WERSJA
+// src/schemas/listing.ts - DODAJ OBSŁUGĘ ZDJĘĆ
 import { z } from "zod";
 
 export const listingFormSchema = z
   .object({
-    title: z.string().min(5, "Tytuł musi mieć co najmniej 5 znaków").max(100),
+    title: z
+      .string()
+      .min(3, "Tytuł musi mieć co najmniej 3 znaki")
+      .max(100, "Tytuł może mieć maksymalnie 100 znaków"),
     description: z
       .string()
       .min(10, "Opis musi mieć co najmniej 10 znaków")
-      .max(500)
-      .optional(),
+      .max(1000, "Opis może mieć maksymalnie 1000 znaków"),
     product_type: z.enum([
       "vegetables",
       "fruits",
@@ -21,38 +23,63 @@ export const listingFormSchema = z
       "other",
     ]),
     price_type: z.enum(["normal", "rescue", "pick_your_own"]),
-    price_per_unit: z.number().min(0).optional(),
+    price_per_unit: z
+      .number()
+      .min(0, "Cena nie może być ujemna")
+      .optional()
+      .or(z.literal(0)),
     unit: z.enum(["kg", "item", "bundle", "dozen", "liter"]),
-    estimated_amount: z.number().min(1).optional(),
-    available_from: z.string().min(1, "Data dostępności jest wymagana"),
-    available_until: z.string().optional(),
-    rescue_reason: z.string().optional(),
-    pickup_instructions: z.string().optional(),
-    farm_id: z.string().min(1, "Wybór gospodarstwa jest wymagany"),
+    estimated_amount: z
+      .number()
+      .min(1, "Ilość musi być większa niż 0")
+      .optional()
+      .or(z.literal(0)),
+    address: z.string().min(5, "Adres musi mieć co najmniej 5 znaków"),
+    available_from: z.string().min(1, "Data rozpoczęcia jest wymagana"),
+    available_until: z.string().optional().or(z.literal("")),
+    rescue_reason: z.string().optional().or(z.literal("")),
+    pickup_instructions: z.string().optional().or(z.literal("")),
+    city: z.string().optional().or(z.literal("")),
+    region: z.string().optional().or(z.literal("")),
+    // WRÓĆ DO images - ale używaj jako tablicy z jednym elementem
+    images: z
+      .array(z.string())
+      .max(1, "Możesz dodać tylko jedno zdjęcie")
+      .optional()
+      .default([]),
   })
   .refine(
     (data) => {
-      // Jeśli to NIE jest akcja ratunkowa, cena jest wymagana
-      if (data.price_type !== "rescue") {
-        return data.price_per_unit !== undefined && data.price_per_unit > 0;
+      if (data.available_until && data.available_from) {
+        return new Date(data.available_until) >= new Date(data.available_from);
       }
       return true;
     },
     {
-      message: "Cena jest wymagana dla zwykłych ogłoszeń",
-      path: ["price_per_unit"],
-    }
-  )
-  .refine(
-    (data) => {
-      // Dla akcji ratunkowych, rescue_reason jest wymagane
-      if (data.price_type === "rescue") {
-        return data.rescue_reason && data.rescue_reason.length > 10;
-      }
-      return true;
-    },
-    {
-      message: "Powód akcji ratunkowej jest wymagany (min. 10 znaków)",
-      path: ["rescue_reason"],
+      message: "Data zakończenia musi być po dacie rozpoczęcia",
+      path: ["available_until"],
     }
   );
+
+export type ListingFormData = z.infer<typeof listingFormSchema>;
+
+// NOWY: Typ dla danych przesyłanych do mutacji
+export interface ListingMutationData {
+  title: string;
+  description: string;
+  product_type: string;
+  price_type: string;
+  price_per_unit: number | null;
+  unit: string;
+  estimated_amount: number | null;
+  address: string;
+  location: string;
+  available_from: string;
+  available_until: string | null;
+  rescue_reason: string | null;
+  pickup_instructions: string | null;
+  city?: string;
+  region?: string;
+  images?: string[]; // Zaktualizowane zdjęcia
+  new_images?: File[]; // Nowe zdjęcia do uploadu
+}

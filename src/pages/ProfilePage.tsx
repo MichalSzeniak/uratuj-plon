@@ -1,7 +1,10 @@
-// src/pages/ProfilePage.tsx
+// src/pages/ProfilePage.tsx - ZAKTUALIZOWANA
 import { useAuth } from "@/store/auth";
 import { useProfile } from "@/hooks/useProfile";
 import { ProfileForm } from "@/components/profile/ProfileForm";
+import { UserListings } from "@/components/profile/UserListings";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { User, List } from "lucide-react";
 
 export function ProfilePage() {
   const { user, isLoading: authLoading } = useAuth();
@@ -31,7 +34,8 @@ export function ProfilePage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-6">
+      {/* Nagłówek profilu */}
       <div className="bg-white rounded-lg shadow-sm p-6">
         <div className="flex items-center space-x-4">
           {user.user_metadata?.avatar_url ? (
@@ -66,23 +70,27 @@ export function ProfilePage() {
         </div>
       </div>
 
-      <ProfileForm />
+      {/* Tabs */}
+      <Tabs defaultValue="listings" className="w-full">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="listings" className="flex items-center gap-2">
+            <List className="h-4 w-4" />
+            Moje Ogłoszenia
+          </TabsTrigger>
+          <TabsTrigger value="profile" className="flex items-center gap-2">
+            <User className="h-4 w-4" />
+            Edytuj Profil
+          </TabsTrigger>
+        </TabsList>
 
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <h3 className="text-lg font-semibold mb-4">Statystyki</h3>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="text-center p-4 bg-green-50 rounded-lg">
-            <div className="text-2xl font-bold text-green-600">0</div>
-            <div className="text-sm text-green-500">
-              Odwiedzonych gospodarstw
-            </div>
-          </div>
-          <div className="text-center p-4 bg-blue-50 rounded-lg">
-            <div className="text-2xl font-bold text-blue-600">0</div>
-            <div className="text-sm text-blue-500">Uratowanych kg</div>
-          </div>
-        </div>
-      </div>
+        <TabsContent value="listings">
+          <UserListings />
+        </TabsContent>
+
+        <TabsContent value="profile">
+          <ProfileForm />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

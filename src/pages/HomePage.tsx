@@ -40,12 +40,6 @@ export function HomePage() {
               </span>
             )}
           </button>
-
-          {/* Przycisk dodania gospodarstwa */}
-          <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors flex items-center space-x-2">
-            <span>👨‍🌾</span>
-            <span>Dodaj Gospodarstwo</span>
-          </button>
         </div>
       </div>
 
@@ -58,27 +52,6 @@ export function HomePage() {
           />
         </div>
       </div>
-
-      {/* Informacje o wybranym gospodarstwie */}
-      {selectedFarm && (
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <div className="flex justify-between items-start">
-            <div>
-              <h3 className="text-xl font-semibold text-gray-900">
-                {selectedFarm.name}
-              </h3>
-              <p className="text-gray-600">{selectedFarm.address}</p>
-            </div>
-            <button
-              onClick={() => setSelectedFarm(null)}
-              className="text-gray-400 hover:text-gray-600"
-            >
-              ✕
-            </button>
-          </div>
-          {/* Tutaj można dodać więcej szczegółów o wybranym gospodarstwie */}
-        </div>
-      )}
 
       {/* Statystyki i informacje */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

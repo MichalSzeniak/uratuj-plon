@@ -1,16 +1,17 @@
-// src/components/maps/FarmMap.tsx - POPRAWIONA WERSJA
+// src/components/maps/FarmMap.tsx - NOWA WERSJA
 import { useEffect, useState, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import { useFarms } from "@/hooks/useFarms";
+import { useListings } from "@/hooks/useListings";
 import { FarmPopup } from "./FarmPopup";
 import { MapControls } from "./MapControls";
 import { RescueListings } from "./RescueListings";
-import { getFarmCoordinates, type Farm } from "@/types/map";
+import { createFarmIcon } from "./CustomMarkers";
+import MarkerClusterGroup from "react-leaflet-markercluster";
 import "leaflet/dist/leaflet.css";
-import { LatLngBounds } from "leaflet";
-import { ReliableTileLayer } from "./ReliableTileLayer";
 
 // Domyślne centrum - Polska
+const DEFAULT_CENTER: [number, number] = [52.0, 19.0];
+const DEFAULT_ZOOM = 6;
 
 // Custom hook do obsługi zmiany widoku mapy
 function MapViewUpdater({
@@ -34,7 +35,6 @@ function MapResizer() {
   const map = useMap();
 
   useEffect(() => {
-    // Wymuś odświeżenie mapy po renderze
     setTimeout(() => {
       map.invalidateSize();
     }, 100);
@@ -45,78 +45,43 @@ function MapResizer() {
 
 interface FarmMapProps {
   showRescueOnly?: boolean;
-  onFarmSelect?: (farm: Farm) => void;
+  onFarmSelect?: (listing: any) => void;
 }
-
-const DEFAULT_CENTER: [number, number] = [52.0, 19.0];
-const DEFAULT_ZOOM = 6;
 
 export function FarmMap({
   showRescueOnly = false,
   onFarmSelect,
 }: FarmMapProps) {
-  const { data: farms, isLoading, error } = useFarms();
+  const { data: listings, isLoading, error } = useListings();
   const [viewport, setViewport] = useState({
-    center: [52.0, 19.0],
-    zoom: 6,
+    center: DEFAULT_CENTER,
+    zoom: DEFAULT_ZOOM,
   });
   const [mapReady, setMapReady] = useState(false);
+  const [selectedListing, setSelectedListing] = useState<any>(null);
   const mapRef = useRef<L.Map | null>(null);
 
   console.log("FarmMap - Status:", {
     isLoading,
     error,
-    farmsCount: farms?.length,
+    listingsCount: listings?.length,
     mapReady,
   });
 
-  // Filtrowanie gospodarstw - tylko z "akcjami ratunkowymi"
-  const filteredFarms = showRescueOnly
-    ? farms?.filter((farm) =>
-        farm.listings?.some((listing) => listing.price_type === "rescue")
-      )
-    : farms;
+  // Filtrowanie ogłoszeń - tylko "akcje ratunkowe"
+  const filteredListings = showRescueOnly
+    ? listings?.filter((listing) => listing.price_type === "rescue")
+    : listings;
 
-  // Sprawdź czy gospodarstwa mają poprawne współrzędne
-  const farmsWithValidCoordinates = filteredFarms?.filter((farm) => {
-    const coords = getFarmCoordinates(farm);
+  // Sprawdź czy ogłoszenia mają poprawne współrzędne
+  const listingsWithValidCoordinates = filteredListings?.filter((listing) => {
     return (
-      coords.lat !== undefined &&
-      coords.lng !== undefined &&
-      coords.lat !== 0 &&
-      coords.lng !== 0
+      listing.latitude !== undefined &&
+      listing.longitude !== undefined &&
+      listing.latitude !== 0 &&
+      listing.longitude !== 0
     );
   });
-
-  const POLAND_BOUNDS = new LatLngBounds([49.0, 14.12], [54.83, 24.15]);
-
-  const DEFAULT_CENTER: [number, number] = [52.0, 19.0];
-  const DEFAULT_ZOOM = 6;
-
-  function PolandBoundsEnforcer() {
-    const map = useMap();
-
-    useEffect(() => {
-      map.setMaxBounds(POLAND_BOUNDS);
-      map.setMinZoom(6);
-      map.setMaxZoom(14);
-
-      // Jeśli mapa jest poza Polską, wróć do centrum
-      const checkBounds = () => {
-        if (!POLAND_BOUNDS.contains(map.getCenter())) {
-          map.setView(DEFAULT_CENTER, DEFAULT_ZOOM);
-        }
-      };
-
-      map.on("drag", checkBounds);
-
-      return () => {
-        map.off("drag", checkBounds);
-      };
-    }, [map]);
-
-    return null;
-  }
 
   // Efekt dla inicjalizacji mapy
   useEffect(() => {
@@ -141,7 +106,7 @@ export function FarmMap({
       <div className="h-full w-full flex items-center justify-center bg-gray-100 rounded-lg">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Ładowanie mapy gospodarstw...</p>
+          <p className="text-gray-600">Ładowanie mapy ogłoszeń...</p>
         </div>
       </div>
     );
@@ -170,77 +135,83 @@ export function FarmMap({
       <MapControls
         viewport={viewport}
         onViewportChange={setViewport}
-        farmCount={farmsWithValidCoordinates?.length || 0}
+        farmCount={listingsWithValidCoordinates?.length || 0}
+        showRescueOnly={showRescueOnly}
+        onToggleRescue={() => {}} // TODO: Zaimplementować toggle
       />
 
       {/* Lista akcji ratunkowych (dla widoku ratunkowego) */}
-      {showRescueOnly && <RescueListings farms={filteredFarms || []} />}
+      {showRescueOnly && <RescueListings listings={filteredListings || []} />}
 
       {/* Główna mapa */}
       <div className="h-full w-full">
         <MapContainer
-          center={DEFAULT_CENTER}
-          zoom={DEFAULT_ZOOM}
+          center={viewport.center}
+          zoom={viewport.zoom}
           style={{ height: "100%", width: "100%" }}
           className="rounded-lg z-0"
           scrollWheelZoom={true}
-          maxBounds={POLAND_BOUNDS}
-          maxBoundsViscosity={0.8}
-          minZoom={6}
-          maxZoom={14}
+          ref={mapRef}
+          whenReady={() => {
+            setMapReady(true);
+            setTimeout(() => {
+              mapRef.current?.invalidateSize();
+            }, 100);
+          }}
         >
           <MapResizer />
           <MapViewUpdater center={viewport.center} zoom={viewport.zoom} />
 
-          <PolandBoundsEnforcer />
-
-          {/* <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            bounds={POLAND_BOUNDS}
-            noWrap={true}
-          /> */}
-
-          {/* <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://openstreetmap.org">OpenStreetMap</a>'
-          /> */}
+          />
 
-          <ReliableTileLayer />
-
-          {/* Markery gospodarstw */}
-          {farmsWithValidCoordinates?.map((farm) => {
-            const coordinates = getFarmCoordinates(farm);
-
-            return (
-              <Marker
-                key={farm.id}
-                position={[coordinates.lat, coordinates.lng]}
-              >
-                <Popup>
-                  <FarmPopup farm={farm} onSelect={onFarmSelect} />
-                </Popup>
-              </Marker>
-            );
-          })}
+          {/* Markery ogłoszeń */}
+          <MarkerClusterGroup>
+            {listingsWithValidCoordinates?.map((listing) => {
+              return (
+                <Marker
+                  key={listing.id}
+                  position={[listing.latitude, listing.longitude]}
+                  icon={createFarmIcon(listing)}
+                >
+                  <Popup>
+                    <FarmPopup listing={listing} onSelect={onFarmSelect} />
+                  </Popup>
+                </Marker>
+                // <Marker
+                //   key={listing.id}
+                //   position={[listing.latitude, listing.longitude]}
+                //   icon={createFarmIcon(listing)}
+                //   eventHandlers={{
+                //     click: () => {
+                //       setSelectedListing(listing);
+                //       onFarmSelect?.(listing);
+                //     },
+                //   }}
+                // ></Marker>
+              );
+            })}
+          </MarkerClusterGroup>
         </MapContainer>
       </div>
 
-      {/* Komunikat jeśli brak gospodarstw */}
-      {farmsWithValidCoordinates?.length === 0 && !isLoading && (
+      {/* Komunikat jeśli brak ogłoszeń */}
+      {listingsWithValidCoordinates?.length === 0 && !isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-90 z-10">
           <div className="text-center p-8">
             <div className="text-6xl mb-4">🌱</div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              {showRescueOnly ? "Brak akcji ratunkowych" : "Brak gospodarstw"}
+              {showRescueOnly ? "Brak akcji ratunkowych" : "Brak ogłoszeń"}
             </h3>
             <p className="text-gray-600 mb-4">
               {showRescueOnly
                 ? "Obecnie nie ma żadnych akcji ratunkowych w Twojej okolicy."
-                : "Jeszcze nie ma gospodarstw w naszej bazie. Bądź pierwszy!"}
+                : "Jeszcze nie ma ogłoszeń w naszej bazie. Bądź pierwszy!"}
             </p>
             <button className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600">
-              Dodaj pierwsze gospodarstwo
+              Dodaj pierwsze ogłoszenie
             </button>
           </div>
         </div>

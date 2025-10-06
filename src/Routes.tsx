@@ -6,6 +6,7 @@ import { LoginPage } from "./pages/LoginPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { AuthCallback } from "./pages/AuthCallback";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
+import { ListingsPage } from "./pages/ListingsPage";
 
 export function AppRoutes() {
   return (
@@ -15,6 +16,7 @@ export function AppRoutes() {
 
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
+        <Route path="/listings" element={<ListingsPage />} />
         {/* DODANA STRONA PROFILU */}
         <Route
           path="/profile"
