@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -65,53 +65,91 @@ const createPickerIcon = () => {
 function MapClickHandler({
   onLocationSelect,
 }: {
-  onLocationSelect: (lat: number, lng: number, adress?: string) => void;
+  onLocationSelect: (lat: number, lng: number, address?: string) => void;
 }) {
   useMapEvents({
     click: (e) => {
       const { lat, lng } = e.latlng;
-
-      fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.address) {
-            const address = [
-              data.address.road,
-              data.address.house_number,
-              data.address.city || data.address.town || data.address.village,
-            ]
-              .filter(Boolean)
-              .join(", ");
-
-            onLocationSelect(lat, lng, address);
-
-            toast.success("📍 Lokalizacja ustawiona", {
-              description: `Adres: ${address || "Brak szczegółów"}`,
-            });
-          }
-        })
-        .catch(() => {
-          onLocationSelect(lat, lng);
-          toast.success("📍 Lokalizacja ustawiona");
-        });
+      fetchAddressFromCoordinates(lat, lng, onLocationSelect);
     },
   });
   return null;
 }
 
+// Funkcja do geokodowania - zamiana adresu na współrzędne
+const fetchCoordinatesFromAddress = async (address: string) => {
+  try {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+        address
+      )}&limit=1`
+    );
+    const data = await response.json();
+
+    if (data && data.length > 0) {
+      return {
+        lat: parseFloat(data[0].lat),
+        lng: parseFloat(data[0].lon),
+        display_name: data[0].display_name,
+      };
+    }
+    return null;
+  } catch (error) {
+    console.error("Błąd geokodowania:", error);
+    return null;
+  }
+};
+
+// Funkcja do reverse geokodowania - zamiana współrzędnych na adres
+const fetchAddressFromCoordinates = async (
+  lat: number,
+  lng: number,
+  callback: (lat: number, lng: number, address?: string) => void
+) => {
+  try {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`
+    );
+    const data = await response.json();
+
+    let address = "";
+    if (data.address) {
+      address = [
+        data.address.road,
+        data.address.house_number,
+        data.address.city || data.address.town || data.address.village,
+      ]
+        .filter(Boolean)
+        .join(", ");
+    }
+
+    callback(
+      lat,
+      lng,
+      address || data.display_name || "Brak szczegółów adresu"
+    );
+    toast.success("📍 Lokalizacja ustawiona", {
+      description: `Adres: ${address || "Brak szczegółów"}`,
+    });
+  } catch (err) {
+    callback(lat, lng);
+    toast.success("📍 Lokalizacja ustawiona");
+  }
+};
+
 interface LocationPickerProps {
   onLocationSelect: (lat: number, lng: number) => void;
+  onAddressSelect?: (address: string) => void;
   initialLocation?: { lat: number; lng: number };
+  initialAddress?: string;
   height?: string;
-  onAdressSelect?: (adress: string) => void;
 }
 
 export function LocationPicker({
   onLocationSelect,
-  onAdressSelect,
+  onAddressSelect,
   initialLocation = { lat: 52.0, lng: 19.0 },
+  initialAddress = "",
   height = "300px",
 }: LocationPickerProps) {
   const [selectedLocation, setSelectedLocation] = useState<{
@@ -122,30 +160,102 @@ export function LocationPicker({
       ? initialLocation
       : null
   );
+  const [addressInput, setAddressInput] = useState(initialAddress);
+  const [isSearching, setIsSearching] = useState(false);
+  const mapRef = useRef<L.Map>(null);
 
-  const handleLocationSelect = (lat: number, lng: number, adress?: string) => {
+  const handleLocationSelect = (lat: number, lng: number, address?: string) => {
     setSelectedLocation({ lat, lng });
     onLocationSelect(lat, lng);
-    if (adress) {
-      onAdressSelect?.(adress);
+
+    if (address) {
+      setAddressInput(address);
+      onAddressSelect?.(address);
     }
+
+    // Centruj mapę na wybranej lokalizacji
+    if (mapRef.current) {
+      mapRef.current.setView([lat, lng], 16);
+    }
+  };
+
+  const handleAddressSearch = async () => {
+    if (!addressInput.trim()) return;
+
+    setIsSearching(true);
+    try {
+      const result = await fetchCoordinatesFromAddress(addressInput);
+      if (result) {
+        handleLocationSelect(result.lat, result.lng, result.display_name);
+        toast.success("📍 Znaleziono lokalizację", {
+          description: `Przesunięto mapę na: ${result.display_name}`,
+        });
+      } else {
+        toast.error("Nie znaleziono adresu");
+      }
+    } catch (error) {
+      toast.error("Błąd podczas wyszukiwania adresu");
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleClearLocation = () => {
+    setSelectedLocation(null);
+    setAddressInput("");
+    onLocationSelect(0, 0);
+    onAddressSelect?.("");
   };
 
   useEffect(() => {
     if (initialLocation.lat !== 0 && initialLocation.lng !== 0) {
       setSelectedLocation(initialLocation);
     }
-  }, [initialLocation]);
+    if (initialAddress) {
+      setAddressInput(initialAddress);
+    }
+  }, [initialLocation, initialAddress]);
 
   return (
     <div className="space-y-3">
+      {/* Wyszukiwanie adresu */}
+
       <div className="text-sm text-gray-600 bg-blue-50 p-3 rounded-lg">
         <p className="font-medium">🗺️ Jak ustawić lokalizację:</p>
         <ol className="list-decimal list-inside space-y-1 mt-1">
-          <li>Przybliż mapę do Twojej okolicy</li>
-          <li>Kliknij dokładnie w miejsce Twojego gospodarstwa</li>
-          <li>Czerwony znacznik pokaże wybraną lokalizację</li>
+          <li>
+            Wpisz adres i kliknij "Szukaj" LUB kliknij bezpośrednio na mapie
+          </li>
+          <li>Mapa automatycznie przeniesie się do wybranej lokalizacji</li>
+          <li>Czerwony znacznik pokaże dokładną pozycję</li>
         </ol>
+      </div>
+
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-gray-700">
+          🔍 Wyszukaj adres
+        </label>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={addressInput}
+            onChange={(e) => setAddressInput(e.target.value)}
+            placeholder="Wpisz adres (ulica, miasto, kod pocztowy)..."
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            onKeyPress={(e) => e.key === "Enter" && handleAddressSearch()}
+          />
+          <button
+            type="button"
+            onClick={handleAddressSearch}
+            disabled={isSearching || !addressInput.trim()}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          >
+            {isSearching ? "..." : "Szukaj"}
+          </button>
+        </div>
+        <p className="text-xs text-gray-500">
+          Wpisz adres i kliknij "Szukaj", lub kliknij bezpośrednio na mapie
+        </p>
       </div>
 
       <div
@@ -154,9 +264,10 @@ export function LocationPicker({
       >
         <MapContainer
           center={selectedLocation || [52.0, 19.0]}
-          zoom={selectedLocation ? 12 : 6}
+          zoom={selectedLocation ? 16 : 6}
           style={{ height: "100%", width: "100%" }}
           scrollWheelZoom={true}
+          ref={mapRef}
         >
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -177,16 +288,16 @@ export function LocationPicker({
       {selectedLocation && (
         <div className="text-sm text-gray-700 p-3 bg-green-50 rounded-lg">
           <p className="font-medium">✅ Lokalizacja wybrana</p>
+          <p className="font-semibold mb-1">
+            {addressInput || "Adres nieznany"}
+          </p>
           <p>
             Szerokość: <strong>{selectedLocation.lat.toFixed(6)}</strong>,
             Długość: <strong>{selectedLocation.lng.toFixed(6)}</strong>
           </p>
           <button
             type="button"
-            onClick={() => {
-              setSelectedLocation(null);
-              onLocationSelect(0, 0);
-            }}
+            onClick={handleClearLocation}
             className="text-xs text-red-600 hover:text-red-800 mt-1"
           >
             ❌ Wyczyść lokalizację
@@ -197,7 +308,7 @@ export function LocationPicker({
       {!selectedLocation && (
         <div className="text-sm text-amber-700 p-3 bg-amber-50 rounded-lg">
           <p className="font-medium">⚠️ Wybierz lokalizację</p>
-          <p>Kliknij na mapie aby ustawić lokalizację Twojego ogłoszenia</p>
+          <p>Wyszukaj adres lub kliknij na mapie aby ustawić lokalizację</p>
         </div>
       )}
     </div>

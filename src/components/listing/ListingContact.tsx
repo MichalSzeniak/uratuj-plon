@@ -8,8 +8,13 @@ interface ListingContactProps {
 }
 
 export function ListingContact({ listing }: ListingContactProps) {
-  const handleContact = (method: string) => {
-    toast.info(`Funkcja ${method} wkrótce dostępna!`);
+  const handleMail = () => {
+    const mailto = `mailto:${
+      listing.contact_email
+    }?subject=${encodeURIComponent("Ratuj plon")}&body=${encodeURIComponent(
+      ""
+    )}`;
+    window.location.href = mailto;
   };
 
   const isMobile = window.innerWidth < 1024;
@@ -40,7 +45,7 @@ export function ListingContact({ listing }: ListingContactProps) {
         <div className="space-y-3">
           <Button
             className="w-full bg-green-600 hover:bg-green-700"
-            onClick={() => handleContact("wiadomości")}
+            onClick={() => handleMail()}
           >
             📧 Wyślij wiadomość
           </Button>

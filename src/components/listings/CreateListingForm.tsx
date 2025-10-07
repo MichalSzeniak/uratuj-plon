@@ -139,9 +139,9 @@ export function CreateListingForm({
     toast.success("📍 Lokalizacja zapisana");
   };
 
-  const handleAdressSelect = (adress: string) => {
-    form.setValue("address", adress);
-  };
+  // const handleAdressSelect = (adress: string) => {
+  //   form.setValue("address", adress);
+  // };
 
   const onSubmit = async (data: ListingFormData) => {
     if (isGuestMode && !canCreateListing) {
@@ -160,8 +160,7 @@ export function CreateListingForm({
         latitude: selectedLocation.lat,
         longitude: selectedLocation.lng,
         available_until: data.available_until || null,
-        price_per_unit:
-          data.price_type === "rescue" ? null : data.price_per_unit,
+        price_per_unit: data.price_per_unit,
         estimated_amount: data.estimated_amount || null,
         rescue_reason: data.rescue_reason || null,
         pickup_instructions: data.pickup_instructions || null,
@@ -450,7 +449,7 @@ export function CreateListingForm({
                         disabled={true}
                       >
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="w-full">
                             <SelectValue placeholder="Wybierz typ oferty" />
                           </SelectTrigger>
                         </FormControl>
@@ -471,30 +470,30 @@ export function CreateListingForm({
                   )}
                 />
 
-                {watchPriceType !== "rescue" && (
-                  <FormField
-                    control={form.control}
-                    name="price_per_unit"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Cena za {form.watch("unit")} *</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            step="0.01"
-                            min="0"
-                            placeholder="0.00"
-                            {...field}
-                            onChange={(e) =>
-                              field.onChange(e.target.valueAsNumber)
-                            }
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                )}
+                {/* {watchPriceType !== "rescue" && ( */}
+                <FormField
+                  control={form.control}
+                  name="price_per_unit"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Cena za {form.watch("unit")} *</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          placeholder="0.00"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(e.target.valueAsNumber)
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* )} */}
               </div>
             </div>
 
@@ -525,7 +524,7 @@ export function CreateListingForm({
             )}
 
             {/* Lokalizacja */}
-            <div className="space-y-4">
+            {/* <div className="space-y-4">
               <h3 className="text-lg font-semibold">📍 Lokalizacja</h3>
 
               <FormField
@@ -567,6 +566,62 @@ export function CreateListingForm({
                 {!selectedLocation && (
                   <p className="text-red-500 text-sm">
                     Kliknij na mapie aby wybrać lokalizację
+                  </p>
+                )}
+              </FormItem>
+            </div> */}
+
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">📍 Lokalizacja</h3>
+
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Adres do wyświetlania *</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="ul. Przykładowa 123, 00-000 Miasto"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Ten adres będzie widoczny w ogłoszeniu
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormItem>
+                <FormLabel className="flex items-center gap-1">
+                  Wybierz dokładną lokalizację na mapie *
+                  {!selectedLocation && (
+                    <span className="text-red-500 text-sm">(wymagane)</span>
+                  )}
+                </FormLabel>
+                <LocationPicker
+                  onLocationSelect={handleLocationSelect}
+                  onAddressSelect={(address) => {
+                    // Automatycznie wypełnij pole adresu, jeśli jest puste
+                    if (!form.getValues("address") && address) {
+                      form.setValue("address", address);
+                    }
+                  }}
+                  initialLocation={{
+                    lat:
+                      selectedLocation?.lat || editingListing?.latitude || 52.0,
+                    lng:
+                      selectedLocation?.lng ||
+                      editingListing?.longitude ||
+                      19.0,
+                  }}
+                  initialAddress={form.getValues("address") || ""}
+                />
+                {!selectedLocation && (
+                  <p className="text-red-500 text-sm">
+                    Wyszukaj adres lub kliknij na mapie aby wybrać lokalizację
                   </p>
                 )}
               </FormItem>

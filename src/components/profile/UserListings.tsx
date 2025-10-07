@@ -56,7 +56,6 @@ export function UserListings() {
 
   return (
     <div className="space-y-6">
-      {/* Nagłówek */}
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Moje Ogłoszenia</h2>
@@ -69,7 +68,6 @@ export function UserListings() {
         </div>
       </div>
 
-      {/* Lista ogłoszeń */}
       <div className="space-y-4">
         {listings?.length === 0 ? (
           <Card className="p-8 text-center">
@@ -88,7 +86,6 @@ export function UserListings() {
             >
               <CardContent className="p-6">
                 <div className="flex flex-col lg:flex-row lg:items-start gap-4">
-                  {/* Zdjęcie */}
                   <div className="flex-shrink-0">
                     <div className="w-20 h-20 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
                       {listing.images && listing.images.length > 0 ? (
@@ -112,7 +109,6 @@ export function UserListings() {
                     </div>
                   </div>
 
-                  {/* Treść */}
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
                       <div className="flex-1">
@@ -141,14 +137,12 @@ export function UserListings() {
                       </div>
                     </div>
 
-                    {/* Opis */}
                     {listing.description && (
                       <p className="text-gray-600 text-sm mb-3 line-clamp-2">
                         {listing.description}
                       </p>
                     )}
 
-                    {/* Metadane */}
                     <div className="flex flex-wrap gap-4 text-sm text-gray-500">
                       <div className="flex items-center gap-1">
                         <MapPin className="h-4 w-4" />
@@ -175,7 +169,6 @@ export function UserListings() {
                       )}
                     </div>
 
-                    {/* Powód akcji ratunkowej */}
                     {listing.rescue_reason && (
                       <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
                         <p className="text-sm font-medium text-red-800 mb-1">
@@ -188,7 +181,6 @@ export function UserListings() {
                     )}
                   </div>
 
-                  {/* Akcje */}
                   <div className="flex lg:flex-col gap-2">
                     <Button
                       variant="outline"
@@ -223,7 +215,6 @@ export function UserListings() {
         )}
       </div>
 
-      {/* Modal edycji */}
       <EditListingModal
         listing={editingListing}
         isOpen={!!editingListing}
@@ -233,7 +224,6 @@ export function UserListings() {
   );
 }
 
-// Skeleton ładowania
 function ListingsSkeleton() {
   return (
     <div className="space-y-4">
