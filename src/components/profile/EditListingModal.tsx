@@ -1,5 +1,10 @@
 import { CreateListingForm } from "../listings/CreateListingForm";
-import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface EditListingModalProps {
   listing: any;
@@ -15,7 +20,9 @@ export function EditListingModal({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-2">
-        <DialogHeader className="text-start">✏️ Edytuj Ogłoszenie</DialogHeader>
+        <DialogHeader className="text-start">
+          <DialogTitle>✏️ Edytuj Ogłoszenie</DialogTitle>
+        </DialogHeader>
         <CreateListingForm
           editingListing={listing}
           onSuccess={onClose}
