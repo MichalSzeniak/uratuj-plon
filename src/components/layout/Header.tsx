@@ -57,18 +57,17 @@ export function Header() {
             </Link>
 
             <nav className="hidden md:flex items-center space-x-4">
+              <Button
+                onClick={() => setCreateListingOpen(true)}
+                className="flex items-center gap-2"
+                size="sm"
+              >
+                <Plus className="h-4 w-4" />
+                <span className="hidden lg:inline">Dodaj Ogłoszenie</span>
+                <span className="lg:hidden">Dodaj</span>
+              </Button>
               {user ? (
                 <div className="flex items-center space-x-4">
-                  <Button
-                    onClick={() => setCreateListingOpen(true)}
-                    className="flex items-center gap-2"
-                    size="sm"
-                  >
-                    <Plus className="h-4 w-4" />
-                    <span className="hidden lg:inline">Dodaj Ogłoszenie</span>
-                    <span className="lg:hidden">Dodaj</span>
-                  </Button>
-
                   <Link
                     to="/profile"
                     className="text-gray-700 hover:text-green-600 transition-colors text-sm"
@@ -197,6 +196,17 @@ export function Header() {
                           </Link>
 
                           <Button
+                            onClick={handleSignOut}
+                            variant="destructive"
+                            className="w-full justify-start gap-3 mt-8"
+                          >
+                            <LogOut className="h-5 w-5" />
+                            <span>Wyloguj</span>
+                          </Button>
+                        </>
+                      ) : (
+                        <div>
+                          <Button
                             onClick={() => {
                               setCreateListingOpen(true);
                               setMobileMenuOpen(false);
@@ -208,24 +218,15 @@ export function Header() {
                             <span>Dodaj Ogłoszenie</span>
                           </Button>
 
-                          <Button
-                            onClick={handleSignOut}
-                            variant="destructive"
-                            className="w-full justify-start gap-3 mt-8"
+                          <Link
+                            to="/login"
+                            className="flex items-center space-x-3 text-gray-700 hover:text-green-600 transition-colors"
+                            onClick={() => setMobileMenuOpen(false)}
                           >
-                            <LogOut className="h-5 w-5" />
-                            <span>Wyloguj</span>
-                          </Button>
-                        </>
-                      ) : (
-                        <Link
-                          to="/login"
-                          className="flex items-center space-x-3 text-gray-700 hover:text-green-600 transition-colors"
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          <span>🔐</span>
-                          <span>Zaloguj się</span>
-                        </Link>
+                            <span>🔐</span>
+                            <span>Zaloguj się</span>
+                          </Link>
+                        </div>
                       )}
                     </nav>
 

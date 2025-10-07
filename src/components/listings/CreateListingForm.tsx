@@ -33,6 +33,8 @@ import {
 import { ImageUploadSimple } from "../ImageUploadSimple";
 import { LocationPicker } from "../maps/LocationPicker";
 import { toast } from "sonner";
+import { AlertTriangle } from "lucide-react";
+import { useGuestListingLimit } from "@/hooks/useGuestListingLimit";
 
 interface CreateListingFormProps {
   onSuccess?: () => void;
@@ -46,6 +48,17 @@ export function CreateListingForm({
   editingListing,
 }: CreateListingFormProps) {
   const { user } = useAuth();
+
+  const { canCreateListing, incrementGuestListing } = useGuestListingLimit();
+  const [isGuestMode, setIsGuestMode] = useState(!user);
+  const [guestContact, setGuestContact] = useState({
+    email: "",
+    phone: "",
+  });
+
+  useEffect(() => {
+    setIsGuestMode(!user);
+  }, [user]);
   const createListing = useCreateListing();
   const updateListing = useUpdateListing();
   const [newImage, setNewImage] = useState<File | null>(null);
@@ -135,6 +148,10 @@ export function CreateListingForm({
   console.log(editingListing);
 
   const onSubmit = async (data: ListingFormData) => {
+    if (isGuestMode && !canCreateListing) {
+      toast.error("❌ Osiągnięto dzienny limit ogłoszeń");
+      return;
+    }
     if (!selectedLocation) {
       toast.error("❌ Wybierz lokalizację na mapie");
       return;
@@ -152,6 +169,11 @@ export function CreateListingForm({
         estimated_amount: data.estimated_amount || null,
         rescue_reason: data.rescue_reason || null,
         pickup_instructions: data.pickup_instructions || null,
+        is_guest_listing: isGuestMode,
+        guest_contact_email: isGuestMode ? guestContact.email : null,
+        guest_contact_phone: isGuestMode ? guestContact.phone : null,
+        requires_approval: isGuestMode, // Tylko guest ogłoszenia wymagają aprobaty
+        status: isGuestMode ? "pending" : "active", // Guest = pending, user = active
       };
 
       if (isEditing) {
@@ -170,6 +192,10 @@ export function CreateListingForm({
           ...baseData,
           new_image: newImage,
         });
+
+        if (isGuestMode) {
+          incrementGuestListing();
+        }
       }
 
       onSuccess?.();
@@ -190,8 +216,24 @@ export function CreateListingForm({
         <CardDescription>
           {isEditing
             ? "Zaktualizuj informacje o swoim ogłoszeniu"
+            : isGuestMode
+            ? "Dodaj ogłoszenie bez logowania (wymaga potwierdzenia)"
             : "Wystaw produkt lub zgłoś akcję ratunkową"}
         </CardDescription>
+
+        {/* ★ INFORMACJA O TRYBIE GOŚCIA */}
+        {isGuestMode && (
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mt-2">
+            <div className="flex items-center gap-2 text-amber-800">
+              <AlertTriangle className="h-4 w-4" />
+              <p className="text-sm font-medium">Tryb gościa</p>
+            </div>
+            <p className="text-xs text-amber-700 mt-1">
+              Twoje ogłoszenie będzie widoczne po zatwierdzeniu przez
+              administratora. Pamiętaj aby podać prawidłowy kontakt.
+            </p>
+          </div>
+        )}
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -200,6 +242,61 @@ export function CreateListingForm({
               <h3 className="text-lg font-semibold">
                 📝 Podstawowe informacje
               </h3>
+
+              {isGuestMode && (
+                <div className="space-y-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <h3 className="text-lg font-semibold text-blue-900">
+                    📞 Twoje dane kontaktowe
+                  </h3>
+                  <p className="text-sm text-blue-700 mb-3">
+                    Podaj dane do kontaktu - będą widoczne tylko w ogłoszeniu po
+                    zatwierdzeniu.
+                  </p>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-sm font-medium text-gray-700 mb-1 block">
+                        Email *
+                      </label>
+                      <Input
+                        type="email"
+                        placeholder="twoj@email.com"
+                        value={guestContact.email}
+                        onChange={(e) =>
+                          setGuestContact((prev) => ({
+                            ...prev,
+                            email: e.target.value,
+                          }))
+                        }
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium text-gray-700 mb-1 block">
+                        Telefon *
+                      </label>
+                      <Input
+                        type="tel"
+                        placeholder="+48 123 456 789"
+                        value={guestContact.phone}
+                        onChange={(e) =>
+                          setGuestContact((prev) => ({
+                            ...prev,
+                            phone: e.target.value,
+                          }))
+                        }
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-blue-600">
+                    💡 Te dane będą wykorzystane tylko do kontaktu w sprawie
+                    tego ogłoszenia.
+                  </p>
+                </div>
+              )}
 
               <FormField
                 control={form.control}
@@ -510,7 +607,7 @@ export function CreateListingForm({
             <div className="flex gap-3 pt-6 border-t">
               <Button
                 type="submit"
-                disabled={currentMutation.isPending}
+                disabled={currentMutation.isPending || !canCreateListing}
                 className="flex-1"
                 size="lg"
               >

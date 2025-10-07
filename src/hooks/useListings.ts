@@ -194,27 +194,10 @@ export function useCreateListing() {
 
   return useMutation({
     mutationFn: async (listingData: any & { images?: File[] }) => {
-      if (!user) throw new Error("Musisz być zalogowany");
+      console.log("🔄 useCreateListing - guest mode:", !user);
 
-      console.log("🔄 useCreateListing - starting...");
-      console.log("📦 Received data:", listingData);
+      const status = listingData.requires_approval ? "pending" : "active";
 
-      // ★ POPRAWIONA WALIDACJA:
-      if (!listingData.location) {
-        throw new Error("Wybierz lokalizację na mapie");
-      }
-
-      // Sprawdź czy location ma poprawny format
-      if (
-        typeof listingData.location !== "string" ||
-        !listingData.location.includes("POINT")
-      ) {
-        throw new Error("Nieprawidłowy format lokalizacji");
-      }
-
-      const status = listingData.price_type === "rescue" ? "pending" : "active";
-
-      // PRZYGOTUJ PAYLOAD (bez latitude/longitude - używamy tylko location)
       const listingPayload = {
         title: listingData.title,
         description: listingData.description || null,
@@ -226,71 +209,52 @@ export function useCreateListing() {
         address: listingData.address,
         city: listingData.city || null,
         region: listingData.region || null,
-        location: listingData.location, // ★ UŻYWAMY location z formularza
+        location: listingData.location,
         available_from: listingData.available_from,
         available_until: listingData.available_until || null,
         rescue_reason: listingData.rescue_reason || null,
         pickup_instructions: listingData.pickup_instructions || null,
+        is_guest_listing: listingData.is_guest_listing,
+        guest_contact_email: listingData.guest_contact_email,
+        guest_contact_phone: listingData.guest_contact_phone,
+        requires_approval: listingData.requires_approval,
+        approved_by_admin: false,
         status,
-        user_id: user.id,
+        user_id: user?.id || null,
       };
 
       console.log("📤 Sending to Supabase:", listingPayload);
 
-      try {
-        const { data, error } = await supabase
-          .from("listings")
-          .insert(listingPayload)
-          .select(
-            `
-            *,
-            profiles:user_id (
-              username,
-              full_name,
-              avatar_url
-            )
-          `
-          )
-          .single();
+      const { data, error } = await supabase
+        .from("listings")
+        .insert(listingPayload)
+        .select()
+        .single();
 
-        if (error) {
-          console.error("❌ Supabase error:", error);
-          throw new Error(`Błąd bazy danych: ${error.message}`);
+      if (error) throw error;
+
+      if (listingData.new_image) {
+        try {
+          const imageUrl = await uploadImage(listingData.new_image, data.id);
+          await supabase
+            .from("listings")
+            .update({ images: [imageUrl] })
+            .eq("id", data.id);
+        } catch (uploadError) {
+          console.error("❌ Image upload failed:", uploadError);
         }
-
-        console.log("✅ Listing created:", data);
-
-        // UPLOAD ZDJĘĆ
-        if (listingData.images && listingData.images.length > 0) {
-          console.log("🖼️ Starting image upload...");
-          try {
-            const imageUrls = await uploadImages(listingData.images, data.id);
-            console.log("✅ Images uploaded:", imageUrls);
-
-            // Zaktualizuj listing z URLami zdjęć
-            await supabase
-              .from("listings")
-              .update({ images: imageUrls })
-              .eq("id", data.id);
-          } catch (uploadError) {
-            console.error("❌ Image upload failed:", uploadError);
-            // Kontynuuj nawet jeśli upload zdjęć się nie udał
-          }
-        }
-
-        return data;
-      } catch (error) {
-        console.error("💥 Mutation failed:", error);
-        throw error;
       }
+
+      return data;
     },
     onSuccess: (data) => {
-      console.log("🎉 Mutation successful, invalidating queries...");
+      console.log("🎉 Mutation successful:", data.status);
       queryClient.invalidateQueries({ queryKey: ["listings"] });
 
       if (data.status === "pending") {
-        toast.success("🎉 Akcja ratunkowa zgłoszona!", {
-          description: "Czeka na zatwierdzenie przez administratora",
+        toast.success("📝 Ogłoszenie wysłane do zatwierdzenia!", {
+          description: "Sprawdzimy je i opublikujemy w ciągu 24 godzin",
+          duration: 6000,
         });
       } else {
         toast.success("✅ Ogłoszenie dodane!", {
@@ -299,10 +263,8 @@ export function useCreateListing() {
       }
     },
     onError: (error) => {
-      console.error("❌ Mutation error callback:", error);
-      toast.error("❌ Błąd dodawania ogłoszenia", {
-        description: error.message,
-      });
+      console.error("❌ Mutation error:", error);
+      toast.error("❌ Błąd dodawania ogłoszenia");
     },
   });
 }

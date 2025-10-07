@@ -9,6 +9,8 @@ import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { ListingsPage } from "./pages/ListingsPage";
 import { ListingPage } from "./pages/ListingPage";
 import { RescueView } from "./components/rescue/RescueView";
+import { AdminRoute } from "./components/auth/AdminRoute";
+import { AdminPage } from "./pages/AdminPage";
 
 export function AppRoutes() {
   return (
@@ -28,6 +30,14 @@ export function AppRoutes() {
             <ProtectedRoute>
               <ProfilePage />
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminPage />
+            </AdminRoute>
           }
         />
       </Route>

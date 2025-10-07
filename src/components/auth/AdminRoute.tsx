@@ -5,8 +5,10 @@ interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
-export function ProtectedRoute({ children }: ProtectedRouteProps) {
+export function AdminRoute({ children }: ProtectedRouteProps) {
   const { user, isLoading } = useAuth();
+
+  const isAdmin = user?.email === "themichaltd@gmail.com";
 
   if (isLoading) {
     return (
@@ -19,7 +21,7 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     );
   }
 
-  if (!user) {
+  if (!user || !isAdmin) {
     return <Navigate to="/login" replace />;
   }
 
