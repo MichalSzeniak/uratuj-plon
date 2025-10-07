@@ -41,7 +41,7 @@ export const listingFormSchema = z
     pickup_instructions: z.string().optional().or(z.literal("")),
     city: z.string().optional().or(z.literal("")),
     region: z.string().optional().or(z.literal("")),
-    // WRÓĆ DO images - ale używaj jako tablicy z jednym elementem
+    contact_phone: z.string().optional().or(z.literal("")),
     images: z
       .array(z.string())
       .max(1, "Możesz dodać tylko jedno zdjęcie")
@@ -63,7 +63,6 @@ export const listingFormSchema = z
 
 export type ListingFormData = z.infer<typeof listingFormSchema>;
 
-// NOWY: Typ dla danych przesyłanych do mutacji
 export interface ListingMutationData {
   title: string;
   description: string;
@@ -80,6 +79,6 @@ export interface ListingMutationData {
   pickup_instructions: string | null;
   city?: string;
   region?: string;
-  images?: string[]; // Zaktualizowane zdjęcia
-  new_images?: File[]; // Nowe zdjęcia do uploadu
+  images?: string[];
+  new_images?: File[];
 }

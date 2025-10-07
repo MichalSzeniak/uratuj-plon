@@ -13,7 +13,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <Router>
           <AuthProvider>
-            <div className="min-h-screen bg-gray-50">
+            <div className="min-h-screen ">
               <AppRoutes />
               <Toaster position="top-right" />
             </div>

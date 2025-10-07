@@ -2,7 +2,9 @@
 import { useState } from "react";
 import { auth } from "@/store/auth";
 import { useAuth } from "@/store/auth";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { Logo } from "@/components/Logo";
+import { Button } from "@/components/ui/button";
 
 export function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -25,23 +27,20 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full text-center space-y-8">
-        {/* Nagłówek */}
-        <div>
-          <div className="mx-auto h-16 w-16 bg-green-500 rounded-full flex items-center justify-center">
-            <span className="text-white font-bold text-xl">F</span>
-          </div>
-          <h1 className="mt-6 text-3xl font-bold text-gray-900">FarmConnect</h1>
-          <p className="mt-2 text-gray-600">Dołącz do społeczności rolników</p>
-        </div>
+    <div className="min-h-screen flex items-center justify-center ">
+      <div className="max-w-md  flex flex-col items-center space-y-8">
+        {/* <Logo  /> */}
 
-        {/* Przycisk Google */}
+        <Logo textClassName="text-4xl" className="w-16 h-28 items-center" />
+        <p className="mt-2 text-gray-600">Dołącz do społeczności rolników</p>
+
         <div>
-          <button
+          <Button
             onClick={handleGoogleLogin}
             disabled={isLoading}
-            className="w-full max-w-xs mx-auto flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+            variant="outline"
+            size="lg"
+            // className="w-full max-w-xs mx-auto flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50"
           >
             <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
               <path
@@ -62,8 +61,15 @@ export function LoginPage() {
               />
             </svg>
             {isLoading ? "Logowanie..." : "Zaloguj przez Google"}
-          </button>
+          </Button>
         </div>
+
+        <Link
+          to="/"
+          className="flex items-center space-x-2 hover:opacity-80 flex-shrink-0"
+        >
+          <Button variant="link">Wróć do strony głównej</Button>
+        </Link>
       </div>
     </div>
   );

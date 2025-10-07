@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Logo } from "../Logo";
 
 export function Header() {
   const { user, isLoading } = useAuth();
@@ -52,19 +53,7 @@ export function Header() {
               to="/"
               className="flex items-center space-x-2 hover:opacity-80 flex-shrink-0"
             >
-              <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-sm">F</span>
-              </div>
-              <h1 className="text-xl font-bold text-gray-900 hidden sm:block">
-                FarmConnect
-              </h1>
-            </Link>
-
-            <Link
-              to="/listings"
-              className="text-gray-700 hover:text-green-600 transition-colors hidden md:block"
-            >
-              Przeglądaj Ogłoszenia
+              <Logo />
             </Link>
 
             <nav className="hidden md:flex items-center space-x-4">
@@ -187,14 +176,14 @@ export function Header() {
                     </div>
 
                     <nav className="flex-1 py-6 space-y-4">
-                      <Link
+                      {/* <Link
                         to="/listings"
                         className="flex items-center space-x-3 text-gray-700 hover:text-green-600 transition-colors"
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         <span>📋</span>
                         <span>Przeglądaj Ogłoszenia</span>
-                      </Link>
+                      </Link> */}
 
                       {user ? (
                         <>
@@ -241,8 +230,8 @@ export function Header() {
                     </nav>
 
                     <div className="pt-4 border-t">
-                      <p className="text-xs text-gray-500 text-center">
-                        FarmConnect © 2024
+                      <p className="text-xs flex items-center justify-between p-2 text-gray-500 text-center">
+                        <Logo />© 2025
                       </p>
                     </div>
                   </div>

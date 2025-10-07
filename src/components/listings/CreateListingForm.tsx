@@ -69,6 +69,7 @@ export function CreateListingForm({
       address: "",
       available_from: new Date().toISOString().split("T")[0],
       images: [],
+      contact_phone: "",
     },
     values: {
       ...editingListing,
@@ -299,6 +300,31 @@ export function CreateListingForm({
                   )}
                 />
               </div>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">
+                📞 Informacje kontaktowe
+              </h3>
+              <FormField
+                control={form.control}
+                name="contact_phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Numer telefonu (opcjonalnie)</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="+48 123 456 789"
+                        {...field}
+                        value={field.value || ""}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Numer będzie widoczny publicznie
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
             {/* Cena i oferta */}

@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { FarmMap } from "@/components/maps/FarmMap";
 import type { Farm } from "@/types/map";
+import { Link } from "react-router-dom";
 
 export function HomePage() {
   const [showRescueOnly, setShowRescueOnly] = useState(false);
@@ -21,6 +22,14 @@ export function HomePage() {
               : "Odkryj lokalne gospodarstwa i kupuj prosto od rolnika"}
           </p>
         </div>
+
+        {/* <Link
+          to="/rescue"
+          className="flex items-center space-x-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+        >
+          <span>🚨</span>
+          <span>Akcje Ratunkowe</span>
+        </Link> */}
 
         <div className="flex space-x-4">
           {/* Przycisk akcji ratunkowych */}
