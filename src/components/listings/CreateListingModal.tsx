@@ -23,7 +23,7 @@ export function CreateListingModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-2">
         <DialogHeader className="text-start">
-          <DialogTitle>➕ Dodaj Nowe Ogłoszenie</DialogTitle>
+          <DialogTitle className="mt-4">➕ Dodaj Nowe Ogłoszenie</DialogTitle>
         </DialogHeader>
         <CreateListingForm
           onSuccess={handleSuccess}

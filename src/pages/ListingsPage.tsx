@@ -1,13 +1,9 @@
-// src/pages/ListingsPage.tsx
-import { useState } from "react";
 import { FarmMap } from "@/components/maps/FarmMap";
 import { ListingsList } from "@/components/listings/ListingsList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Map, List } from "lucide-react";
 
 export function ListingsPage() {
-  const [selectedFarm, setSelectedFarm] = useState(null);
-
   return (
     <div className="space-y-6">
       <div>
@@ -34,7 +30,7 @@ export function ListingsPage() {
         <TabsContent value="map" className="space-y-4">
           <div className="bg-white rounded-lg shadow-sm overflow-hidden">
             <div className="h-[600px] relative">
-              <FarmMap onFarmSelect={setSelectedFarm} />
+              <FarmMap />
             </div>
           </div>
         </TabsContent>

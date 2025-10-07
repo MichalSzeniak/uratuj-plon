@@ -12,10 +12,9 @@ export function ProfileForm() {
     full_name: "",
     bio: "",
     phone: "",
-    role: "customer" as const,
+    role: "" as "farmer" | "customer" | "collector" | undefined,
   });
 
-  // Inicjalizuj formData gdy profile się załaduje
   useState(() => {
     if (profile) {
       setFormData({

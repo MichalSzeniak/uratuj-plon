@@ -1,4 +1,3 @@
-// src/Routes.tsx - DODAJ PROFIL
 import { Routes, Route } from "react-router-dom";
 import { Layout } from "./components/layout/Layout";
 import { HomePage } from "./pages/HomePage";
@@ -8,7 +7,7 @@ import { AuthCallback } from "./pages/AuthCallback";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { ListingsPage } from "./pages/ListingsPage";
 import { ListingPage } from "./pages/ListingPage";
-import { RescueView } from "./components/rescue/RescueView";
+// import { RescueView } from "./components/rescue/RescueView";
 import { AdminRoute } from "./components/auth/AdminRoute";
 import { AdminPage } from "./pages/AdminPage";
 
@@ -22,7 +21,7 @@ export function AppRoutes() {
         <Route index element={<HomePage />} />
         <Route path="/listings" element={<ListingsPage />} />
         <Route path="/listing/:id" element={<ListingPage />} />
-        <Route path="/rescue" element={<RescueView />} />
+        {/* <Route path="/rescue" element={<RescueView />} /> */}
         {/* DODANA STRONA PROFILU */}
         <Route
           path="/profile"

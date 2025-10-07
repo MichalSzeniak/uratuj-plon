@@ -1,4 +1,3 @@
-// src/pages/ProfilePage.tsx - ZAKTUALIZOWANA
 import { useAuth } from "@/store/auth";
 import { useProfile } from "@/hooks/useProfile";
 import { ProfileForm } from "@/components/profile/ProfileForm";
@@ -10,7 +9,7 @@ export function ProfilePage() {
   const { user, isLoading: authLoading } = useAuth();
   const { data: profile, isLoading: profileLoading } = useProfile();
 
-  if (authLoading) {
+  if (authLoading || profileLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -35,7 +34,6 @@ export function ProfilePage() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      {/* Nagłówek profilu */}
       <div className="bg-white rounded-lg shadow-sm p-6">
         <div className="flex items-center space-x-4">
           {user.user_metadata?.avatar_url ? (
@@ -70,7 +68,6 @@ export function ProfilePage() {
         </div>
       </div>
 
-      {/* Tabs */}
       <Tabs defaultValue="listings" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="listings" className="flex items-center gap-2">

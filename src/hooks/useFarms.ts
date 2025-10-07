@@ -7,7 +7,7 @@ export function useFarms() {
     queryKey: ["farms"],
     queryFn: async (): Promise<Farm[]> => {
       try {
-        const { data, error, status } = await supabase
+        const { data, error } = await supabase
           .from("farms")
           .select(
             `

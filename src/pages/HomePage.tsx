@@ -1,12 +1,8 @@
-// src/pages/HomePage.tsx
 import { useState } from "react";
 import { FarmMap } from "@/components/maps/FarmMap";
-import type { Farm } from "@/types/map";
-import { Link } from "react-router-dom";
 
 export function HomePage() {
   const [showRescueOnly, setShowRescueOnly] = useState(false);
-  const [selectedFarm, setSelectedFarm] = useState<Farm | null>(null);
 
   return (
     <div className="space-y-6">
@@ -47,10 +43,7 @@ export function HomePage() {
       {/* Mapa */}
       <div className="bg-white rounded-lg shadow-sm overflow-hidden">
         <div className="h-[600px]  min-h-[400px] w-full relative">
-          <FarmMap
-            showRescueOnly={showRescueOnly}
-            onFarmSelect={setSelectedFarm}
-          />
+          <FarmMap showRescueOnly={showRescueOnly} />
         </div>
       </div>
 

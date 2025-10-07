@@ -30,7 +30,6 @@ function MapViewUpdater({
   return null;
 }
 
-// Hook do obsługi resize mapy
 function MapResizer() {
   const map = useMap();
 
@@ -44,18 +43,14 @@ function MapResizer() {
 }
 interface FarmMapProps {
   showRescueOnly?: boolean;
-  onFarmSelect?: (listing: any) => void;
 }
 
-export function FarmMap({
-  showRescueOnly = false,
-  onFarmSelect,
-}: FarmMapProps) {
+export function FarmMap({ showRescueOnly = false }: FarmMapProps) {
   const { data: listings, isLoading, error } = useListings();
-  const [viewport, setViewport] = useState({
+  const viewport = {
     center: DEFAULT_CENTER,
     zoom: DEFAULT_ZOOM,
-  });
+  };
   const [mapReady, setMapReady] = useState(false);
   const [selectedListing, setSelectedListing] = useState<any>(null);
   const mapRef = useRef<L.Map | null>(null);
@@ -109,7 +104,7 @@ export function FarmMap({
     }
   }, [mapReady]);
 
-  const createClusterCustomIcon = (cluster) => {
+  const createClusterCustomIcon = (cluster: any) => {
     const count = cluster.getChildCount();
 
     let color = "bg-sky-500";
@@ -184,7 +179,7 @@ export function FarmMap({
                 >
                   {!isMobile && (
                     <Popup>
-                      <FarmPopup listing={listing} onSelect={onFarmSelect} />
+                      <FarmPopup listing={listing} />
                     </Popup>
                   )}
                 </Marker>

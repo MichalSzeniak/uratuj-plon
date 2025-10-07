@@ -1,4 +1,3 @@
-// src/components/maps/CustomMarkers.tsx
 import L from "leaflet";
 import { renderToStaticMarkup } from "react-dom/server";
 
@@ -12,7 +11,7 @@ L.Icon.Default.mergeOptions({
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 });
 
-const createCustomIcon = (color: string, hasRescue: boolean = false) => {
+const createCustomIcon = (color: string) => {
   const html = renderToStaticMarkup(
     <div
       style={{
@@ -48,33 +47,26 @@ const createCustomIcon = (color: string, hasRescue: boolean = false) => {
   });
 };
 
-// Predefiniowane kolory według legendy
 export const markerColors = {
-  normal: "#22c55e", // zielony - gospodarstwo
-  rescue: "#ef4444", // czerwony - akcja ratunkowa
-  pickup: "#3b82f6", // niebieski - zbiór samodzielny
+  normal: "#22c55e",
+  rescue: "#ef4444",
+  pickup: "#3b82f6",
 };
 
-// Funkcja helper do określania koloru znacznika
-export const getMarkerColor = (listing: any): string => {
-  // Jeśli to akcja ratunkowa - czerwony
+export const getMarkerColor = (listing: any) => {
   if (listing.price_type === "rescue") {
     return markerColors.rescue;
   }
 
-  // Jeśli to zbiór samodzielny - niebieski
   if (listing.price_type === "pick_your_own") {
     return markerColors.pickup;
   }
 
-  // Domyślnie - zielony
   return markerColors.normal;
 };
 
-// Funkcja tworząca ikonę dla gospodarstwa
 export const createFarmIcon = (listing: any) => {
   const color = getMarkerColor(listing);
-  const hasRescue = listing.price_type === "rescue";
 
-  return createCustomIcon(color, hasRescue);
+  return createCustomIcon(color);
 };

@@ -31,7 +31,6 @@ export function AdminPage() {
     },
   });
 
-  // Mutacja do zatwierdzania ogłoszenia
   const approveMutation = useMutation({
     mutationFn: async (listingId: string) => {
       const { error } = await supabase
@@ -52,12 +51,11 @@ export function AdminPage() {
       queryClient.invalidateQueries({ queryKey: ["listings"] });
       toast.success("✅ Ogłoszenie zatwierdzone!");
     },
-    onError: (error) => {
+    onError: () => {
       toast.error("❌ Błąd podczas zatwierdzania");
     },
   });
 
-  // Mutacja do odrzucania ogłoszenia
   const rejectMutation = useMutation({
     mutationFn: async (listingId: string) => {
       const { error } = await supabase
@@ -73,7 +71,7 @@ export function AdminPage() {
       });
       toast.success("🗑️ Ogłoszenie odrzucone");
     },
-    onError: (error) => {
+    onError: () => {
       toast.error("❌ Błąd podczas odrzucania");
     },
   });
@@ -92,7 +90,6 @@ export function AdminPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-6xl mx-auto px-4">
-        {/* Nagłówek */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             👮 Panel Administratora
@@ -101,7 +98,6 @@ export function AdminPage() {
             Zarządzaj ogłoszeniami oczekującymi na zatwierdzenie
           </p>
 
-          {/* Statystyki */}
           <div className="flex gap-4 mt-4">
             <Card className="flex-1">
               <CardContent className="p-4">

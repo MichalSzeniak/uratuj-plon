@@ -18,6 +18,9 @@ export function MobileMapControls({
 }: MobileMapControlsProps) {
   const [contactModalOpen, setContactModalOpen] = useState(false);
 
+  const hasContactInfo =
+    selectedListing?.contact_phone || selectedListing?.contact_email;
+
   if (!selectedListing) return null;
 
   return (
@@ -84,7 +87,7 @@ export function MobileMapControls({
           </Button>
 
           <Button
-            disabled={!selectedListing.contact_phone}
+            disabled={!hasContactInfo}
             onClick={() => setContactModalOpen(true)}
             variant="outline"
             size="sm"
@@ -98,6 +101,7 @@ export function MobileMapControls({
             onClose={setContactModalOpen}
             listing={selectedListing}
             phoneNumber={selectedListing.contact_phone}
+            email={selectedListing.contact_email}
           />
         </div>
 

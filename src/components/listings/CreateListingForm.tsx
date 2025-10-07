@@ -66,7 +66,7 @@ export function CreateListingForm({
 
   const [removedExistingImage, setRemovedExistingImage] = useState(false);
 
-  const form = useForm<ListingFormData>({
+  const form = useForm({
     resolver: zodResolver(listingFormSchema),
     defaultValues: {
       title: "",
@@ -497,29 +497,6 @@ export function CreateListingForm({
                 )}
               </div>
             </div>
-
-            {/* Zdjęcie
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">🖼️ Zdjęcie główne</h3>
-
-              <FormItem>
-                <FormLabel>
-                  {isEditing
-                    ? "Zmień zdjęcie (opcjonalnie)"
-                    : "Dodaj zdjęcie (opcjonalnie)"}
-                </FormLabel>
-                <FormControl>
-                  <ImageUploadSimple
-                    onImageChange={handleImageChange}
-                    existingImageUrl={editingListing?.images?.[0] || null}
-                    onExistingImageRemove={handleExistingImageRemove} // ★ NOWE
-                  />
-                </FormControl>
-                <FormDescription>
-                  Zdjęcie główne zwiększa zainteresowanie ogłoszeniem
-                </FormDescription>
-              </FormItem>
-            </div> */}
 
             {!isGuestMode && (
               <div className="space-y-6">

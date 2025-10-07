@@ -92,7 +92,7 @@ function MapClickHandler({
             });
           }
         })
-        .catch((error) => {
+        .catch(() => {
           onLocationSelect(lat, lng);
           toast.success("📍 Lokalizacja ustawiona");
         });
@@ -105,6 +105,7 @@ interface LocationPickerProps {
   onLocationSelect: (lat: number, lng: number) => void;
   initialLocation?: { lat: number; lng: number };
   height?: string;
+  onAdressSelect?: (adress: string) => void;
 }
 
 export function LocationPicker({
@@ -122,10 +123,12 @@ export function LocationPicker({
       : null
   );
 
-  const handleLocationSelect = (lat: number, lng: number, adress: string) => {
+  const handleLocationSelect = (lat: number, lng: number, adress?: string) => {
     setSelectedLocation({ lat, lng });
     onLocationSelect(lat, lng);
-    onAdressSelect(adress);
+    if (adress) {
+      onAdressSelect?.(adress);
+    }
   };
 
   useEffect(() => {

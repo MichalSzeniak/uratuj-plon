@@ -21,7 +21,7 @@ export function EditListingModal({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-2">
         <DialogHeader className="text-start">
-          <DialogTitle>✏️ Edytuj Ogłoszenie</DialogTitle>
+          <DialogTitle className="mt-4">✏️ Edytuj Ogłoszenie</DialogTitle>
         </DialogHeader>
         <CreateListingForm
           editingListing={listing}

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
 import type { Profile } from "@/types/database";
 import { Logo } from "@/components/Logo";
+// import { useAuth } from "@/store/auth";
 
 export function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -15,7 +15,7 @@ export function RegisterPage() {
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const { signUpWithPassword } = useAuth();
+  // const { signUpWithPassword } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -37,11 +37,11 @@ export function RegisterPage() {
     }
 
     try {
-      await signUpWithPassword(formData.email, formData.password, {
-        username: formData.username || formData.email.split("@")[0],
-        full_name: formData.full_name,
-        role: formData.role,
-      });
+      // await signUpWithPassword(formData.email, formData.password, {
+      //   username: formData.username || formData.email.split("@")[0],
+      //   full_name: formData.full_name,
+      //   role: formData.role,
+      // });
       setMessage("Konto utworzone! Sprawdź email aby potwierdzić rejestrację.");
 
       setTimeout(() => {

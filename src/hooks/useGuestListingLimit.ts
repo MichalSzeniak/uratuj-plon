@@ -6,7 +6,7 @@ interface GuestListingLimits {
   timeUntilReset: string;
 }
 
-export function useGuestListingLimit(): GuestListingLimits {
+export function useGuestListingLimit() {
   const [limits, setLimits] = useState<GuestListingLimits>({
     canCreateListing: true,
     remainingListings: 3,

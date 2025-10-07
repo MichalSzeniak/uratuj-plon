@@ -41,14 +41,6 @@ export class ErrorBoundary extends Component<Props, State> {
             >
               Odśwież stronę
             </button>
-            <details className="mt-4 text-left">
-              <summary className="cursor-pointer text-sm text-gray-500">
-                Szczegóły błędu
-              </summary>
-              <pre className="mt-2 text-xs text-gray-400 overflow-auto">
-                {this.state.error?.toString()}
-              </pre>
-            </details>
           </div>
         </div>
       );

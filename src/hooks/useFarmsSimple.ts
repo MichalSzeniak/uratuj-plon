@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
-import { Farm } from "@/types/map";
+import type { Farm } from "@/types/map";
 
 export function useFarmsSimple() {
   return useQuery({
