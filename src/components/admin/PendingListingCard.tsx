@@ -118,7 +118,7 @@ export function PendingListingCard({
                     </div>
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <Phone className="h-4 w-4" />
-                      <span>{listing.guest_contact_phone}</span>
+                      <span>{listing.contact_phone}</span>
                     </div>
                   </>
                 ) : (

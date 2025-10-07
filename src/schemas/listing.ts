@@ -1,4 +1,3 @@
-// src/schemas/listing.ts - DODAJ OBSŁUGĘ ZDJĘĆ
 import { z } from "zod";
 
 export const listingFormSchema = z
@@ -41,7 +40,19 @@ export const listingFormSchema = z
     pickup_instructions: z.string().optional().or(z.literal("")),
     city: z.string().optional().or(z.literal("")),
     region: z.string().optional().or(z.literal("")),
-    contact_phone: z.string().optional().or(z.literal("")),
+    contact_phone: z
+      .string()
+      .trim()
+      .regex(/^\+?[0-9\s-]{7,15}$/, "Niepoprawny numer telefonu")
+      .optional()
+      .or(z.literal("")),
+    contact_email: z
+      .string()
+      .trim()
+      .email("Niepoprawny adres e-mail")
+      .max(50, "max. 50 znaków")
+      .optional()
+      .or(z.literal("")),
     images: z
       .array(z.string())
       .max(1, "Możesz dodać tylko jedno zdjęcie")
@@ -59,7 +70,12 @@ export const listingFormSchema = z
       message: "Data zakończenia musi być po dacie rozpoczęcia",
       path: ["available_until"],
     }
-  );
+  )
+  .refine((data) => data.contact_phone?.trim() || data.contact_email?.trim(), {
+    message:
+      "Podaj numer telefonu lub adres e-mail (przynajmniej jedno wymagane)",
+    path: ["contact_phone"],
+  });
 
 export type ListingFormData = z.infer<typeof listingFormSchema>;
 

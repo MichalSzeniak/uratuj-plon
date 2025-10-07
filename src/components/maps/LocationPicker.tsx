@@ -1,11 +1,9 @@
-// src/components/maps/LocationPicker.tsx
 import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { toast } from "sonner";
 
-// Napraw problem z domyślnymi ikonami Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
@@ -16,7 +14,6 @@ L.Icon.Default.mergeOptions({
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 });
 
-// Customowa ikona dla LocationPicker
 const createPickerIcon = () => {
   return L.divIcon({
     html: `
@@ -65,46 +62,37 @@ const createPickerIcon = () => {
   });
 };
 
-// Komponent do obsługi kliknięć na mapie
 function MapClickHandler({
   onLocationSelect,
 }: {
-  onLocationSelect: (lat: number, lng: number) => void;
+  onLocationSelect: (lat: number, lng: number, adress?: string) => void;
 }) {
   useMapEvents({
     click: (e) => {
       const { lat, lng } = e.latlng;
-      console.log("🗺️ Map clicked:", { lat, lng });
 
-      // Reverse geocoding - spróbuj pobrać adres
       fetch(
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`
       )
         .then((response) => response.json())
         .then((data) => {
-          console.log("🌍 Reverse geocoding result:", data);
-
           if (data.address) {
             const address = [
               data.address.road,
               data.address.house_number,
               data.address.city || data.address.town || data.address.village,
-              data.address.postcode,
             ]
               .filter(Boolean)
               .join(", ");
 
-            // Wywołaj callback z danymi
-            onLocationSelect(lat, lng);
+            onLocationSelect(lat, lng, address);
 
-            // Pokazuj informację
             toast.success("📍 Lokalizacja ustawiona", {
               description: `Adres: ${address || "Brak szczegółów"}`,
             });
           }
         })
         .catch((error) => {
-          console.log("❌ Reverse geocoding failed, using coordinates only");
           onLocationSelect(lat, lng);
           toast.success("📍 Lokalizacja ustawiona");
         });
@@ -121,6 +109,7 @@ interface LocationPickerProps {
 
 export function LocationPicker({
   onLocationSelect,
+  onAdressSelect,
   initialLocation = { lat: 52.0, lng: 19.0 },
   height = "300px",
 }: LocationPickerProps) {
@@ -133,12 +122,12 @@ export function LocationPicker({
       : null
   );
 
-  const handleLocationSelect = (lat: number, lng: number) => {
+  const handleLocationSelect = (lat: number, lng: number, adress: string) => {
     setSelectedLocation({ lat, lng });
     onLocationSelect(lat, lng);
+    onAdressSelect(adress);
   };
 
-  // Aktualizuj initialLocation gdy się zmienia
   useEffect(() => {
     if (initialLocation.lat !== 0 && initialLocation.lng !== 0) {
       setSelectedLocation(initialLocation);
@@ -147,7 +136,6 @@ export function LocationPicker({
 
   return (
     <div className="space-y-3">
-      {/* Instrukcja */}
       <div className="text-sm text-gray-600 bg-blue-50 p-3 rounded-lg">
         <p className="font-medium">🗺️ Jak ustawić lokalizację:</p>
         <ol className="list-decimal list-inside space-y-1 mt-1">
@@ -157,7 +145,6 @@ export function LocationPicker({
         </ol>
       </div>
 
-      {/* Mapa */}
       <div
         className="border-2 border-gray-300 rounded-lg overflow-hidden"
         style={{ height }}
@@ -175,7 +162,6 @@ export function LocationPicker({
 
           <MapClickHandler onLocationSelect={handleLocationSelect} />
 
-          {/* Wybrany marker */}
           {selectedLocation && (
             <Marker
               position={[selectedLocation.lat, selectedLocation.lng]}
@@ -185,7 +171,6 @@ export function LocationPicker({
         </MapContainer>
       </div>
 
-      {/* Informacje o wybranej lokalizacji */}
       {selectedLocation && (
         <div className="text-sm text-gray-700 p-3 bg-green-50 rounded-lg">
           <p className="font-medium">✅ Lokalizacja wybrana</p>

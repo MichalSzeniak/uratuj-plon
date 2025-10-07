@@ -8,12 +8,8 @@ export function AuthCallback() {
 
   useEffect(() => {
     const handleCallback = async () => {
-      console.log("🔄 Przetwarzanie callbacku...");
-
-      // Po prostu sprawdź auth i przekieruj
       await auth.checkAuth();
 
-      // Daj chwilę na aktualizację stanu
       setTimeout(() => {
         navigate("/", { replace: true });
       }, 1000);

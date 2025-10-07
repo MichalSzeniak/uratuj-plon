@@ -1,11 +1,4 @@
-// src/components/listings/CreateListingModal.tsx
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { CreateListingForm } from "./CreateListingForm";
 
 interface CreateListingModalProps {
@@ -23,12 +16,9 @@ export function CreateListingModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Dodaj Nowe Ogłoszenie</DialogTitle>
-          <DialogDescription>
-            Wystaw produkt do sprzedaży lub zgłoś akcję ratunkową
-          </DialogDescription>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-2">
+        <DialogHeader className="text-start">
+          ➕ Dodaj Nowe Ogłoszenie
         </DialogHeader>
         <CreateListingForm
           onSuccess={handleSuccess}

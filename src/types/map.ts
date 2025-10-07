@@ -1,4 +1,3 @@
-// src/types/map.ts
 export interface Location {
   lat: number;
   lng: number;
@@ -17,7 +16,6 @@ export interface Farm {
   is_verified: boolean;
   created_at: string;
   farmer_id: string;
-  // Relacje
   profiles?: {
     username: string | null;
     full_name: string | null;
@@ -58,14 +56,11 @@ export type MapViewport = {
   zoom: number;
 };
 
-// src/types/map.ts - ULEPSZONA WERSJA
 export function getFarmCoordinates(farm: Farm): Location {
-  // Jeśli mamy bezpośrednio location
   if (farm.location && farm.location.lat && farm.location.lng) {
     return farm.location;
   }
 
-  // Jeśli mamy współrzędne z PostGIS
   if (farm.location && (farm.location as any).coordinates) {
     const [lng, lat] = (farm.location as any).coordinates;
     if (lat && lng) {
@@ -73,12 +68,10 @@ export function getFarmCoordinates(farm: Farm): Location {
     }
   }
 
-  // Jeśli mamy osobne pola latitude/longitude
   if (farm.latitude && farm.longitude) {
     return { lat: farm.latitude, lng: farm.longitude };
   }
 
   console.warn("Farm without valid coordinates:", farm.id, farm.name);
-  // Domyślne współrzędne (Warszawa) jeśli brak danych
   return { lat: 52.2297, lng: 21.0122 };
 }

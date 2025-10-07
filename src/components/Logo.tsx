@@ -40,9 +40,9 @@ export function Logo({
         />
       </svg>
       {showText && (
-        <h1 className={cn("font-bold tracking-tight", textClassName)}>
+        <h2 className={cn("font-bold tracking-tight", textClassName)}>
           ratuj plon
-        </h1>
+        </h2>
       )}
     </div>
   );

@@ -13,9 +13,10 @@ import { Logo } from "./Logo";
 
 interface ShareButtonProps {
   listing: any;
+  className?: string;
 }
 
-export function ShareButton({ listing }: ShareButtonProps) {
+export function ShareButton({ listing, className }: ShareButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const shareUrl = `${window.location.origin}/listing/${listing.id}`;
 
@@ -51,7 +52,7 @@ export function ShareButton({ listing }: ShareButtonProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
+      <DialogTrigger asChild className={className}>
         <Button variant="outline" size="sm">
           📤 Udostępnij
         </Button>
@@ -76,9 +77,7 @@ export function ShareButton({ listing }: ShareButtonProps) {
               {listing.description}
             </p>
             <div className="flex justify-between items-center text-xs text-gray-500">
-              <span>
-                <Logo className="h-6 w-24 text-white" />
-              </span>
+              <Logo className="h-6 w-24 text-white" />
               <span>{new URL(shareUrl).hostname}</span>
             </div>
           </div>

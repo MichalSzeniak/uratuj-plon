@@ -36,11 +36,6 @@ export async function compressImage(file: File): Promise<Blob> {
         canvas.toBlob(
           (blob) => {
             if (blob) {
-              console.log("✅ Compression successful:", {
-                original: file.size,
-                compressed: blob.size,
-                reduction: `${((1 - blob.size / file.size) * 100).toFixed(1)}%`,
-              });
               resolve(blob);
             } else {
               reject(new Error("Blob creation failed"));
@@ -64,8 +59,6 @@ export async function compressImage(file: File): Promise<Blob> {
 }
 
 export function validateImage(file: File): string | null {
-  console.log("🔍 Validating file:", file.name, file.type, file.size);
-
   if (!IMAGE_CONFIG.acceptedTypes.includes(file.type)) {
     return "Akceptujemy tylko pliki JPG, PNG i WebP";
   }

@@ -12,8 +12,6 @@ export function useUserListings() {
     queryFn: async () => {
       if (!user) return [];
 
-      console.log("📋 Pobieram ogłoszenia użytkownika...");
-
       const { data, error } = await supabase
         .from("listings")
         .select(
@@ -48,8 +46,6 @@ export function useUpdateListing() {
     mutationFn: async ({ id, updates }: { id: string; updates: any }) => {
       if (!user) throw new Error("Musisz być zalogowany");
 
-      console.log("✏️ Aktualizuję ogłoszenie:", { id, updates });
-
       const { data, error } = await supabase
         .from("listings")
         .update({
@@ -57,7 +53,7 @@ export function useUpdateListing() {
           updated_at: new Date().toISOString(),
         })
         .eq("id", id)
-        .eq("user_id", user.id) // Tylko właściciel może edytować
+        .eq("user_id", user.id)
         .select()
         .single();
 
@@ -73,7 +69,7 @@ export function useUpdateListing() {
       queryClient.invalidateQueries({ queryKey: ["listings"] });
       toast.success("✅ Ogłoszenie zaktualizowane");
     },
-    onError: (error) => {
+    onError: () => {
       toast.error("❌ Błąd aktualizacji ogłoszenia");
     },
   });
@@ -86,8 +82,6 @@ export function useDeleteListing() {
   return useMutation({
     mutationFn: async ({ id, updates }: { id: string; updates: any }) => {
       if (!user) throw new Error("Musisz być zalogowany");
-
-      console.log("✏️ Aktualizuję ogłoszenie:", { id, updates });
 
       const { data, error } = await supabase
         .from("listings")
@@ -127,7 +121,7 @@ export function useDeleteListing() {
       queryClient.invalidateQueries({ queryKey: ["listings"] });
       toast.success("🗑️ Ogłoszenie usunięte");
     },
-    onError: (error) => {
+    onError: () => {
       toast.error("❌ Błąd usuwania ogłoszenia");
     },
   });

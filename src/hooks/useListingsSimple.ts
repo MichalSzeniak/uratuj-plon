@@ -1,4 +1,3 @@
-// hooks/useListingsSimple.ts
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/store/auth";
@@ -12,16 +11,12 @@ export function useUpdateListingSimple() {
     mutationFn: async ({ id, updates }: { id: string; updates: any }) => {
       if (!user) throw new Error("Musisz być zalogowany");
 
-      console.log("🔄 Updating listing:", { id, updates });
-
-      // Upload nowego zdjęcia jeśli jest
       let images = updates.images || [];
 
       if (updates.new_image) {
-        console.log("📸 Uploading new image");
         try {
           const imageUrl = await uploadSingleImage(updates.new_image, id);
-          images = [imageUrl]; // Zastąp wszystkie zdjęcia nowym
+          images = [imageUrl];
         } catch (error) {
           console.error("❌ Image upload failed:", error);
         }
@@ -61,7 +56,7 @@ export function useUpdateListingSimple() {
       queryClient.invalidateQueries({ queryKey: ["user-listings"] });
       toast.success("✅ Ogłoszenie zaktualizowane!");
     },
-    onError: (error) => {
+    onError: () => {
       toast.error("❌ Błąd aktualizacji");
     },
   });

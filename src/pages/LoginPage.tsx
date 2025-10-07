@@ -29,8 +29,6 @@ export function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center ">
       <div className="max-w-md  flex flex-col items-center space-y-8">
-        {/* <Logo  /> */}
-
         <Logo textClassName="text-4xl" className="w-16 h-28 items-center" />
         <p className="mt-2 text-gray-600">Dołącz do społeczności rolników</p>
 

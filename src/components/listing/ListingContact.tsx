@@ -1,7 +1,7 @@
-// src/components/listing/ListingContact.tsx
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { Copy, MessageCircle, Phone } from "lucide-react";
 
 interface ListingContactProps {
   listing: any;
@@ -10,12 +10,31 @@ interface ListingContactProps {
 export function ListingContact({ listing }: ListingContactProps) {
   const handleContact = (method: string) => {
     toast.info(`Funkcja ${method} wkrótce dostępna!`);
-    // Tutaj później dodamy prawdziwą implementację
+  };
+
+  const isMobile = window.innerWidth < 1024;
+
+  const phone = listing.contact_phone;
+
+  const handleCall = () => {
+    if (!phone) return;
+    window.location.href = `tel:${phone}`;
+  };
+
+  const handleSMS = () => {
+    if (!phone) return;
+    window.location.href = `sms:${phone}`;
+  };
+
+  const handleCopyNumber = async () => {
+    if (!phone) return;
+    await navigator.clipboard.writeText(phone);
+    toast.success("✅ Numer skopiowany do schowka");
   };
 
   return (
     <Card>
-      <CardContent className="p-6">
+      <CardContent className="p-6 py-0">
         <h3 className="font-semibold mb-4">💬 Skontaktuj się</h3>
 
         <div className="space-y-3">
@@ -26,27 +45,34 @@ export function ListingContact({ listing }: ListingContactProps) {
             📧 Wyślij wiadomość
           </Button>
 
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={() => handleContact("telefonu")}
-          >
-            📞 Zadzwoń
-          </Button>
+          {isMobile && phone && (
+            <>
+              <Button
+                onClick={handleCall}
+                className="flex items-center gap-2 w-full"
+              >
+                <Phone className="h-4 w-4" />
+                Zadzwoń
+              </Button>
 
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={() => handleContact("WhatsApp")}
-          >
-            💚 WhatsApp
-          </Button>
-        </div>
+              <Button
+                onClick={handleSMS}
+                variant="outline"
+                className="flex items-center gap-2 w-full"
+              >
+                <MessageCircle className="h-4 w-4" />
+                SMS
+              </Button>
+            </>
+          )}
 
-        <div className="mt-4 pt-4 border-t border-gray-200">
-          <p className="text-sm text-gray-600">
-            Odpowiedź zazwyczaj w ciągu 24 godzin
-          </p>
+          <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+            <span>Numer telefonu:</span>
+            <span className="font-mono">{phone}</span>
+            <Button variant="ghost" size="sm" onClick={handleCopyNumber}>
+              <Copy className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>

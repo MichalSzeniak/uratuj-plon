@@ -25,7 +25,6 @@ export function ImageUpload({
   );
   const [isCompressing, setIsCompressing] = useState(false);
 
-  // Synchronizuj existingImage
   useEffect(() => {
     setCurrentImage(existingImage);
   }, [existingImage]);
@@ -34,23 +33,17 @@ export function ImageUpload({
     async (acceptedFiles: File[]) => {
       if (acceptedFiles.length === 0) return;
 
-      // Przyjmij tylko pierwszy plik
       const file = acceptedFiles[0];
-
-      console.log("📸 Processing single image:", file.name);
 
       setIsCompressing(true);
 
       try {
-        // Walidacja
         const error = validateImage(file);
         if (error) {
           toast.error(error);
           return;
         }
 
-        // Kompresja
-        console.log("🔄 Compressing image...");
         const compressedBlob = await compressImage(file);
         const compressedFile = new File(
           [compressedBlob],
@@ -58,18 +51,15 @@ export function ImageUpload({
           { type: "image/webp" }
         );
 
-        console.log("✅ Compression completed");
         setNewFile(compressedFile);
         onImageChange(compressedFile);
 
-        // Jeśli było stare zdjęcie, wyczyść je
         if (currentImage) {
           setCurrentImage(null);
           onExistingImageChange?.(null);
         }
       } catch (error) {
         console.error("❌ Compression error:", error);
-        // Fallback do oryginału
         setNewFile(file);
         onImageChange(file);
 
@@ -85,19 +75,15 @@ export function ImageUpload({
   );
 
   const removeNewFile = () => {
-    console.log("🗑️ Removing new file");
     setNewFile(null);
     onImageChange(null);
 
-    // ★ WAŻNE: Jeśli usuwamy nowy plik, przywróć istniejące zdjęcie
     if (currentImage) {
       onExistingImageChange?.(currentImage);
     }
   };
 
   const removeExistingImage = () => {
-    console.log("🗑️ Removing existing image:", currentImage);
-
     if (confirm("Czy na pewno chcesz usunąć to zdjęcie?")) {
       setCurrentImage(null);
       onExistingImageChange?.(null);

@@ -61,26 +61,12 @@ export function FarmMap({
   const mapRef = useRef<L.Map | null>(null);
   const navigate = useNavigate();
 
-  // Hook do wykrywania mobile/desktop
-  // const isMobile = useMediaQuery("(max-width: 1024px)");
+  const isMobile = window.innerWidth < 1024;
 
-  const isMobile = window.innerWidth < 1024; // lg breakpoint
-
-  console.log("FarmMap - Status:", {
-    isLoading,
-    error,
-    listingsCount: listings?.length,
-    mapReady,
-    isMobile,
-    selectedListing: selectedListing?.id,
-  });
-
-  // Filtrowanie ogłoszeń
   const filteredListings = showRescueOnly
     ? listings?.filter((listing) => listing.price_type === "rescue")
     : listings;
 
-  // Sprawdź czy ogłoszenia mają poprawne współrzędne
   const listingsWithValidCoordinates = filteredListings?.filter((listing) => {
     return (
       listing.latitude !== undefined &&
@@ -90,20 +76,10 @@ export function FarmMap({
     );
   });
 
-  // Handlery dla markerów
-  const handleMarkerClick = (listing: any) => {
-    console.log("📍 Marker clicked:", listing.id, "Mobile:", isMobile);
-    setSelectedListing(listing);
-
-    // Na desktop od razu pokazujemy popup (Leaflet się tym zajmuje)
-    // Na mobile pokazujemy nasze custom controls
-  };
-
   const handleShowDetails = () => {
     if (selectedListing) {
-      console.log("📱 Navigating to listing:", selectedListing.id);
       navigate(`/listing/${selectedListing.id}`);
-      setSelectedListing(null); // Reset po nawigacji
+      setSelectedListing(null);
     }
   };
 
@@ -112,12 +88,6 @@ export function FarmMap({
       const url = `https://www.google.com/maps/dir/?api=1&destination=${selectedListing.latitude},${selectedListing.longitude}`;
       window.open(url, "_blank");
     }
-  };
-
-  const handleCall = () => {
-    // Tutaj później dodamy prawdziwy numer
-    console.log("📞 Call action for:", selectedListing?.id);
-    // toast.info("📞 Otwieranie aplikacji telefonu...");
   };
 
   const handleCloseMobileControls = () => {
@@ -160,7 +130,6 @@ export function FarmMap({
   };
 
   const handleMobileMarkerClick = (listing: any) => {
-    console.log("📱 Mobile marker click:", listing.id);
     setSelectedListing(listing);
   };
 
@@ -198,11 +167,6 @@ export function FarmMap({
           <MapResizer />
           <MapViewUpdater center={viewport.center} zoom={viewport.zoom} />
 
-          {/* <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          /> */}
-
           <ReliableTileLayer />
 
           <MarkerClusterGroup iconCreateFunction={createClusterCustomIcon}>
@@ -235,7 +199,6 @@ export function FarmMap({
           selectedListing={selectedListing}
           onShowDetails={handleShowDetails}
           onNavigate={handleNavigate}
-          onCall={handleCall}
           onClose={handleCloseMobileControls}
         />
       )}

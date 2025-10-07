@@ -8,8 +8,8 @@ import { ShareButton } from "@/components/ShareButton";
 import { toast } from "sonner";
 import { ListingGallery } from "@/components/listing/ListingGallery";
 import { ListingContact } from "@/components/listing/ListingContact";
-import { ListingActions } from "@/components/listing/ListingActions";
 import { MapNavigation } from "@/components/listing/MapNavigation";
+import { ArrowLeft, Package } from "lucide-react";
 
 interface Listing {
   id: string;
@@ -50,7 +50,6 @@ export function ListingPage() {
   const fetchListing = async () => {
     try {
       setLoading(true);
-      console.log("📋 Fetching listing:", id);
 
       const { data, error } = await supabase
         .from("listings")
@@ -72,7 +71,6 @@ export function ListingPage() {
         throw error;
       }
 
-      console.log("✅ Listing fetched:", data);
       setListing(data);
     } catch (err: any) {
       console.error("💥 Failed to fetch listing:", err);
@@ -85,7 +83,7 @@ export function ListingPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Ładowanie ogłoszenia...</p>
@@ -96,8 +94,8 @@ export function ListingPage() {
 
   if (error || !listing) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+        <div className="text-center max-w-md">
           <div className="text-6xl mb-4">😕</div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">
             Ogłoszenie nie znalezione
@@ -106,91 +104,172 @@ export function ListingPage() {
             {error || "To ogłoszenie może zostać usunięte lub nie istnieje."}
           </p>
           <Link to="/">
-            <Button>← Wróć do strony głównej</Button>
+            <Button className="gap-2">
+              <ArrowLeft className="h-4 w-4" />
+              Wróć do mapy
+            </Button>
           </Link>
         </div>
       </div>
     );
   }
 
+  const productTypeLabels: { [key: string]: string } = {
+    vegetables: "🥦 Warzywa",
+    fruits: "🍎 Owoce",
+    grains: "🌾 Zboża",
+    honey: "🍯 Miód",
+    eggs: "🥚 Jaja",
+    dairy: "🧀 Nabiał",
+    meat: "🥩 Mięso",
+    preserves: "🥫 Przetwory",
+  };
+
   return (
-    <div className="min-h-screen ">
-      <div className="bg-white border-b">
+    <div className="min-h-screen bg-gray-50">
+      {/* Nagłówek - uproszczony i sticky na mobile */}
+      <div className="bg-white border-b sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <Link
-            to="/"
-            className="inline-flex items-center text-green-600 hover:text-green-700 mb-4"
-          >
-            ← Wróć do mapy
-          </Link>
-          <div className="flex justify-between items-start">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                {listing.title}
-              </h1>
-              <div className="flex items-center gap-2 mt-2">
-                <Badge variant="secondary">
-                  {listing.user?.full_name ||
-                    listing.user?.username ||
-                    "Anonim"}
-                </Badge>
-                {listing.price_type === "rescue" && (
-                  <Badge variant="destructive">🚨 Akcja Ratunkowa</Badge>
-                )}
-                <Badge variant="outline" className="capitalize">
-                  {listing.product_type}
-                </Badge>
-              </div>
-            </div>
+          <div className="flex items-center justify-between">
+            <Link
+              to="/"
+              className="inline-flex items-center text-green-600 hover:text-green-700 font-medium"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Wróć do mapy
+            </Link>
             <ShareButton listing={listing} />
+          </div>
+
+          {/* Tytuł - widoczny tylko na desktop */}
+          <div className="hidden lg:block mt-3">
+            <h1 className="text-3xl font-bold text-gray-900">
+              {listing.title}
+            </h1>
+            <div className="flex items-center gap-2 mt-2">
+              <Badge variant="secondary">
+                {listing.user?.full_name || listing.user?.username || "Anonim"}
+              </Badge>
+              {listing.price_type === "rescue" && (
+                <Badge variant="destructive">🚨 Akcja Ratunkowa</Badge>
+              )}
+              <Badge variant="outline" className="capitalize">
+                {productTypeLabels[listing.product_type] ||
+                  listing.product_type}
+              </Badge>
+            </div>
           </div>
         </div>
       </div>
 
+      {/* Główna zawartość */}
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Lewa kolumna - Zawartość główna */}
           <div className="lg:col-span-2 space-y-6">
+            {/* Galeria */}
             <ListingGallery images={listing.images} title={listing.title} />
 
+            {/* Tytuł - tylko na mobile */}
+            <div className="lg:hidden">
+              <Card>
+                <CardContent className="p-4">
+                  <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                    {listing.title}
+                  </h1>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <Badge variant="secondary">
+                      {listing.user?.full_name ||
+                        listing.user?.username ||
+                        "Anonim"}
+                    </Badge>
+                    {listing.price_type === "rescue" && (
+                      <Badge variant="destructive">🚨 Ratunkowe</Badge>
+                    )}
+                    <Badge variant="outline" className="capitalize">
+                      {productTypeLabels[listing.product_type] ||
+                        listing.product_type}
+                    </Badge>
+                  </div>
+
+                  {/* Cena - prominentnie na mobile */}
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-3 mt-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-lg font-bold text-green-800">
+                        {listing.price_per_unit
+                          ? `${listing.price_per_unit} zł/${listing.unit}`
+                          : "Za darmo"}
+                      </span>
+                      {listing.estimated_amount && (
+                        <span className="text-sm text-green-700">
+                          {listing.estimated_amount} {listing.unit} dostępne
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Akcje kontaktowe - tylko na mobile */}
+            <div className="lg:hidden space-y-4">
+              <ListingContact listing={listing} />
+            </div>
+
+            {/* Opis */}
             <Card>
               <CardContent className="p-6">
                 <h2 className="text-xl font-semibold mb-4">Opis</h2>
-                <p className="text-gray-700 leading-relaxed">
+                <p className="text-gray-700 leading-relaxed whitespace-pre-line">
                   {listing.description || "Brak opisu."}
                 </p>
               </CardContent>
             </Card>
 
+            {/* Instrukcje odbioru */}
             {listing.pickup_instructions && (
               <Card>
                 <CardContent className="p-6">
                   <h2 className="text-xl font-semibold mb-4">
                     📋 Instrukcje odbioru
                   </h2>
-                  <p className="text-gray-700">{listing.pickup_instructions}</p>
+                  <p className="text-gray-700 whitespace-pre-line">
+                    {listing.pickup_instructions}
+                  </p>
                 </CardContent>
               </Card>
             )}
 
+            {/* Powód ratunkowy */}
             {listing.rescue_reason && (
               <Card className="border-red-200 bg-red-50">
                 <CardContent className="p-6">
                   <h2 className="text-xl font-semibold mb-4 text-red-800">
                     ⚠️ Powód akcji ratunkowej
                   </h2>
-                  <p className="text-red-700">{listing.rescue_reason}</p>
+                  <p className="text-red-700 whitespace-pre-line">
+                    {listing.rescue_reason}
+                  </p>
                 </CardContent>
               </Card>
             )}
           </div>
 
+          {/* Prawa kolumna - Sidebar na desktop */}
           <div className="space-y-6">
-            <ListingContact listing={listing} />
-            <ListingActions listing={listing} />
+            {/* Akcje kontaktowe - tylko na desktop */}
+            <div className="hidden lg:block space-y-4">
+              <ListingContact listing={listing} />
+              <MapNavigation listing={listing} />
+            </div>
 
+            {/* Szczegóły oferty */}
             <Card>
-              <CardContent className="p-6">
-                <h3 className="font-semibold mb-4">📦 Szczegóły oferty</h3>
+              <CardContent className="p-6 py-0">
+                <h3 className="font-semibold mb-4 flex items-center gap-2">
+                  <Package className="h-5 w-5 text-gray-600" />
+                  Szczegóły oferty
+                </h3>
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Cena:</span>
@@ -232,53 +311,6 @@ export function ListingPage() {
                 </div>
               </CardContent>
             </Card>
-
-            {/* <Card>
-              <CardContent className="p-6">
-                <h3 className="font-semibold mb-4">📍 Lokalizacja</h3>
-                <p className="text-gray-700">{listing.address}</p>
-                {listing.city && (
-                  <p className="text-gray-600 mt-1">
-                    {listing.city}, {listing.region}
-                  </p>
-                )}
-                <Button variant="outline" className="w-full mt-4">
-                  🗺️ Pokaż na mapie
-                </Button>
-              </CardContent>
-            </Card> */}
-
-            {/* Lokalizacja i nawigacja */}
-            <div className="space-y-6">
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="font-semibold mb-4">📍 Lokalizacja</h3>
-                  <p className="text-gray-700">{listing.address}</p>
-                  {listing.city && (
-                    <p className="text-gray-600 mt-1">
-                      {listing.city}, {listing.region}
-                    </p>
-                  )}
-
-                  {/* Mini mapa lub static map */}
-                  {listing.latitude && listing.longitude && (
-                    <div className="mt-4">
-                      <img
-                        src={`https://maps.googleapis.com/maps/api/staticmap?center=${listing.latitude},${listing.longitude}&zoom=13&size=300x150&markers=color:red%7C${listing.latitude},${listing.longitude}&key=YOUR_GOOGLE_MAPS_API_KEY`}
-                        alt="Lokalizacja na mapie"
-                        className="w-full h-32 object-cover rounded-lg border border-gray-300"
-                      />
-                      <p className="text-xs text-gray-500 mt-2 text-center">
-                        Kliknij poniżej aby otworzyć nawigację
-                      </p>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Nawigacja */}
-              <MapNavigation listing={listing} />
-            </div>
           </div>
         </div>
       </div>

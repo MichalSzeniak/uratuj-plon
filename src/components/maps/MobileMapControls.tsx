@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { MapPin, Navigation, Phone, X } from "lucide-react";
-import { toast } from "sonner";
 import { ContactModal } from "../listing/ContactModal";
 import { useState } from "react";
 
@@ -8,7 +7,6 @@ interface MobileMapControlsProps {
   selectedListing: any | null;
   onShowDetails: () => void;
   onNavigate: () => void;
-  onCall: () => void;
   onClose: () => void;
 }
 
@@ -16,39 +14,18 @@ export function MobileMapControls({
   selectedListing,
   onShowDetails,
   onNavigate,
-  onCall,
   onClose,
 }: MobileMapControlsProps) {
   const [contactModalOpen, setContactModalOpen] = useState(false);
-  // console.log(selectedListing);
-  // const handleCall = () => {
-  //   const phoneNumber = "+48123456789";
-
-  //   const isMobileDevice =
-  //     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-  //       navigator.userAgent
-  //     );
-
-  //   if (isMobileDevice) {
-  //     window.location.href = `tel:${phoneNumber}`;
-  //   } else {
-  //     toast.info(`📞 Numer telefonu: ${phoneNumber}`, {
-  //       action: {
-  //         label: "Kopiuj",
-  //         onClick: () => navigator.clipboard.writeText(phoneNumber),
-  //       },
-  //     });
-  //   }
-  // };
 
   if (!selectedListing) return null;
 
   return (
     <div className="fixed bottom-4 left-4 right-4 z-[9] lg:hidden animate-in slide-in-from-bottom duration-300">
       <div className="bg-white rounded-xl shadow-lg p-4 border border-gray-200">
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between mb-3 ">
           <div className="flex-1 mr-2">
-            <h3 className="font-semibold text-sm truncate">
+            <h3 className="font-semibold text-sm truncate max-w-44">
               {selectedListing.title}
             </h3>
             <p className="text-xs text-gray-500 truncate">

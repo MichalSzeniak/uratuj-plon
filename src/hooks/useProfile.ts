@@ -1,4 +1,3 @@
-// src/hooks/useProfile.ts
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/store/auth";
@@ -25,8 +24,6 @@ export function useProfile() {
     queryFn: async (): Promise<Profile | null> => {
       if (!user) return null;
 
-      console.log("👤 Pobieram profil...");
-
       const { data, error } = await supabase
         .from("profiles")
         .select("*")
@@ -38,7 +35,6 @@ export function useProfile() {
         throw error;
       }
 
-      console.log("✅ Profil pobrany");
       return data;
     },
     enabled: !!user, // Tylko jeśli użytkownik jest zalogowany
@@ -52,8 +48,6 @@ export function useUpdateProfile() {
   return useMutation({
     mutationFn: async (updates: Partial<Profile>) => {
       if (!user) throw new Error("Musisz być zalogowany");
-
-      console.log("✏️ Aktualizuję profil:", updates);
 
       const { data, error } = await supabase
         .from("profiles")
@@ -70,11 +64,9 @@ export function useUpdateProfile() {
         throw error;
       }
 
-      console.log("✅ Profil zaktualizowany");
       return data;
     },
     onSuccess: () => {
-      // Odśwież zapytanie profilu
       queryClient.invalidateQueries({ queryKey: ["profile"] });
     },
   });

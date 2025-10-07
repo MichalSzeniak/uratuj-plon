@@ -2,8 +2,8 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { AppRoutes } from "./Routes";
-import { Toaster } from "react-hot-toast";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import { Toaster } from "sonner";
 
 const queryClient = new QueryClient();
 
@@ -15,7 +15,7 @@ function App() {
           <AuthProvider>
             <div className="min-h-screen ">
               <AppRoutes />
-              <Toaster position="top-right" />
+              <Toaster />
             </div>
           </AuthProvider>
         </Router>

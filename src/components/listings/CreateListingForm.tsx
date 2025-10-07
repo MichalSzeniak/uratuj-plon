@@ -27,13 +27,12 @@ import {
   Card,
   CardContent,
   CardHeader,
-  CardTitle,
   CardDescription,
 } from "@/components/ui/card";
 import { ImageUploadSimple } from "../ImageUploadSimple";
 import { LocationPicker } from "../maps/LocationPicker";
 import { toast } from "sonner";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Mail, Phone } from "lucide-react";
 import { useGuestListingLimit } from "@/hooks/useGuestListingLimit";
 
 interface CreateListingFormProps {
@@ -51,10 +50,6 @@ export function CreateListingForm({
 
   const { canCreateListing, incrementGuestListing } = useGuestListingLimit();
   const [isGuestMode, setIsGuestMode] = useState(!user);
-  const [guestContact, setGuestContact] = useState({
-    email: "",
-    phone: "",
-  });
 
   useEffect(() => {
     setIsGuestMode(!user);
@@ -77,12 +72,13 @@ export function CreateListingForm({
       title: "",
       description: "",
       product_type: "vegetables",
-      price_type: "normal",
+      price_type: "rescue",
       unit: "kg",
       address: "",
       available_from: new Date().toISOString().split("T")[0],
       images: [],
       contact_phone: "",
+      contact_email: "",
     },
     values: {
       ...editingListing,
@@ -91,8 +87,6 @@ export function CreateListingForm({
 
   useEffect(() => {
     if (editingListing && editingListing.product_type) {
-      console.log("📝 Setting up form for editing");
-
       const coordinates = extractCoordinates(editingListing.location);
       setSelectedLocation(coordinates);
       setNewImage(null);
@@ -116,6 +110,8 @@ export function CreateListingForm({
         city: editingListing.city || "",
         region: editingListing.region || "",
         images: editingListing.images || [],
+        contact_phone: editingListing.contact_phone,
+        contact_email: editingListing.contact_email,
       });
 
       setTimeout(() => {
@@ -130,12 +126,10 @@ export function CreateListingForm({
   }, [editingListing, form]);
 
   const handleImageChange = (file: File | null) => {
-    console.log("📸 Image changed:", file);
     setNewImage(file);
   };
 
   const handleExistingImageRemove = () => {
-    console.log("🗑️ User removed existing image");
     setRemovedExistingImage(true);
     form.setValue("images", []);
   };
@@ -145,7 +139,9 @@ export function CreateListingForm({
     toast.success("📍 Lokalizacja zapisana");
   };
 
-  console.log(editingListing);
+  const handleAdressSelect = (adress: string) => {
+    form.setValue("address", adress);
+  };
 
   const onSubmit = async (data: ListingFormData) => {
     if (isGuestMode && !canCreateListing) {
@@ -170,10 +166,10 @@ export function CreateListingForm({
         rescue_reason: data.rescue_reason || null,
         pickup_instructions: data.pickup_instructions || null,
         is_guest_listing: isGuestMode,
-        guest_contact_email: isGuestMode ? guestContact.email : null,
-        guest_contact_phone: isGuestMode ? guestContact.phone : null,
-        requires_approval: isGuestMode, // Tylko guest ogłoszenia wymagają aprobaty
-        status: isGuestMode ? "pending" : "active", // Guest = pending, user = active
+        contact_email: data.contact_email,
+        contact_phone: data.contact_phone,
+        requires_approval: isGuestMode,
+        status: isGuestMode ? "pending" : "active",
       };
 
       if (isEditing) {
@@ -208,11 +204,8 @@ export function CreateListingForm({
   const watchPriceType = form.watch("price_type");
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
+    <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
-        <CardTitle>
-          {isEditing ? "✏️ Edytuj Ogłoszenie" : "➕ Dodaj Nowe Ogłoszenie"}
-        </CardTitle>
         <CardDescription>
           {isEditing
             ? "Zaktualizuj informacje o swoim ogłoszeniu"
@@ -221,17 +214,26 @@ export function CreateListingForm({
             : "Wystaw produkt lub zgłoś akcję ratunkową"}
         </CardDescription>
 
-        {/* ★ INFORMACJA O TRYBIE GOŚCIA */}
         {isGuestMode && (
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mt-2">
-            <div className="flex items-center gap-2 text-amber-800">
-              <AlertTriangle className="h-4 w-4" />
-              <p className="text-sm font-medium">Tryb gościa</p>
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mt-2">
+            <div className="flex items-start gap-3">
+              <AlertTriangle className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
+              <div className="flex-1">
+                <h4 className="font-semibold text-amber-800 text-sm">
+                  Tryb gościa - tylko ogłoszenia awaryjne
+                </h4>
+                <ul className="text-xs text-amber-700 mt-1 space-y-1">
+                  <li>
+                    • Twoje ogłoszenie wymaga zatwierdzenia przez administratora
+                  </li>
+                  <li>
+                    • Możesz dodać tylko ogłoszenia typu "Akcja Ratunkowa"
+                  </li>
+                  <li>• Zdjęcia są niedostępne w trybie gościa</li>
+                  <li>• Pamiętaj o podaniu prawidłowych danych kontaktowych</li>
+                </ul>
+              </div>
             </div>
-            <p className="text-xs text-amber-700 mt-1">
-              Twoje ogłoszenie będzie widoczne po zatwierdzeniu przez
-              administratora. Pamiętaj aby podać prawidłowy kontakt.
-            </p>
           </div>
         )}
       </CardHeader>
@@ -242,61 +244,6 @@ export function CreateListingForm({
               <h3 className="text-lg font-semibold">
                 📝 Podstawowe informacje
               </h3>
-
-              {isGuestMode && (
-                <div className="space-y-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                  <h3 className="text-lg font-semibold text-blue-900">
-                    📞 Twoje dane kontaktowe
-                  </h3>
-                  <p className="text-sm text-blue-700 mb-3">
-                    Podaj dane do kontaktu - będą widoczne tylko w ogłoszeniu po
-                    zatwierdzeniu.
-                  </p>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm font-medium text-gray-700 mb-1 block">
-                        Email *
-                      </label>
-                      <Input
-                        type="email"
-                        placeholder="twoj@email.com"
-                        value={guestContact.email}
-                        onChange={(e) =>
-                          setGuestContact((prev) => ({
-                            ...prev,
-                            email: e.target.value,
-                          }))
-                        }
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <label className="text-sm font-medium text-gray-700 mb-1 block">
-                        Telefon *
-                      </label>
-                      <Input
-                        type="tel"
-                        placeholder="+48 123 456 789"
-                        value={guestContact.phone}
-                        onChange={(e) =>
-                          setGuestContact((prev) => ({
-                            ...prev,
-                            phone: e.target.value,
-                          }))
-                        }
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <p className="text-xs text-blue-600">
-                    💡 Te dane będą wykorzystane tylko do kontaktu w sprawie
-                    tego ogłoszenia.
-                  </p>
-                </div>
-              )}
 
               <FormField
                 control={form.control}
@@ -330,12 +277,31 @@ export function CreateListingForm({
                 )}
               />
 
+              {watchPriceType === "rescue" && (
+                <FormField
+                  control={form.control}
+                  name="rescue_reason"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Powód akcji ratunkowej *</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Dlaczego ten produkt wymaga ratowania? (np. nadmiar plonów, zbliżający się termin przydatności, problemy z przechowywaniem)"
+                          className="min-h-[80px] text-base"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="product_type"
                   render={({ field }) => {
-                    console.log("🎯 Product type field value:", field.value); // ★ DODAJ TEN LOG
                     return (
                       <FormItem>
                         <FormLabel>Typ produktu *</FormLabel>
@@ -344,7 +310,7 @@ export function CreateListingForm({
                           value={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className="w-full">
                               <SelectValue placeholder="Wybierz typ" />
                             </SelectTrigger>
                           </FormControl>
@@ -373,14 +339,14 @@ export function CreateListingForm({
                   control={form.control}
                   name="unit"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="flex-1">
                       <FormLabel>Jednostka *</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         value={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="w-full">
                             <SelectValue placeholder="Wybierz jednostkę" />
                           </SelectTrigger>
                         </FormControl>
@@ -398,16 +364,34 @@ export function CreateListingForm({
                 />
               </div>
             </div>
+
+            {isGuestMode && (
+              <div className="space-y-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <h3 className="text-lg font-semibold text-blue-900">
+                  📞 Twoje dane kontaktowe
+                </h3>
+                <p className="text-sm text-blue-700 mb-3">
+                  Podaj dane do kontaktu - będą widoczne tylko w ogłoszeniu po
+                  zatwierdzeniu.
+                </p>
+
+                <p className="text-xs text-blue-600">
+                  💡 Te dane będą wykorzystane tylko do kontaktu w sprawie tego
+                  ogłoszenia.
+                </p>
+              </div>
+            )}
+
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold">
-                📞 Informacje kontaktowe
-              </h3>
               <FormField
                 control={form.control}
                 name="contact_phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Numer telefonu (opcjonalnie)</FormLabel>
+                    <FormLabel>
+                      <Phone className="h-4 w-4" />
+                      Numer telefonu
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="+48 123 456 789"
@@ -416,7 +400,32 @@ export function CreateListingForm({
                       />
                     </FormControl>
                     <FormDescription>
-                      Numer będzie widoczny publicznie
+                      Numer będzie widoczny w ogłoszeniu
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="contact_email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center gap-2">
+                      <Mail className="h-4 w-4" />
+                      Email
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="email@example.com"
+                        type="email"
+                        className="text-base"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Email będzie widoczny w ogłoszeniu
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -438,6 +447,7 @@ export function CreateListingForm({
                       <Select
                         onValueChange={field.onChange}
                         value={field.value}
+                        disabled={true}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -488,7 +498,7 @@ export function CreateListingForm({
               </div>
             </div>
 
-            {/* Zdjęcie */}
+            {/* Zdjęcie
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">🖼️ Zdjęcie główne</h3>
 
@@ -509,7 +519,33 @@ export function CreateListingForm({
                   Zdjęcie główne zwiększa zainteresowanie ogłoszeniem
                 </FormDescription>
               </FormItem>
-            </div>
+            </div> */}
+
+            {!isGuestMode && (
+              <div className="space-y-6">
+                <h3 className="text-xl font-semibold flex items-center gap-2">
+                  🖼️ Zdjęcie główne
+                </h3>
+
+                <FormItem>
+                  <FormLabel>
+                    {isEditing
+                      ? "Zmień zdjęcie (opcjonalnie)"
+                      : "Dodaj zdjęcie (opcjonalnie)"}
+                  </FormLabel>
+                  <FormControl>
+                    <ImageUploadSimple
+                      onImageChange={handleImageChange}
+                      existingImageUrl={editingListing?.images?.[0] || null}
+                      onExistingImageRemove={handleExistingImageRemove}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Zdjęcie główne zwiększa zainteresowanie ogłoszeniem
+                  </FormDescription>
+                </FormItem>
+              </div>
+            )}
 
             {/* Lokalizacja */}
             <div className="space-y-4">
@@ -541,6 +577,7 @@ export function CreateListingForm({
                 </FormLabel>
                 <LocationPicker
                   onLocationSelect={handleLocationSelect}
+                  onAdressSelect={handleAdressSelect}
                   initialLocation={{
                     lat:
                       selectedLocation?.lat || editingListing?.latitude || 52.0,
