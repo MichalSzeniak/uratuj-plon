@@ -596,7 +596,7 @@ export function CreateListingForm({
 
               <FormItem>
                 <FormLabel className="flex items-center gap-1">
-                  Wybierz dokładną lokalizację na mapie *
+                  Wybierz dokładną lokalizację na mapie
                   {!selectedLocation && (
                     <span className="text-red-500 text-sm">(wymagane)</span>
                   )}
@@ -604,7 +604,6 @@ export function CreateListingForm({
                 <LocationPicker
                   onLocationSelect={handleLocationSelect}
                   onAddressSelect={(address) => {
-                    // Automatycznie wypełnij pole adresu, jeśli jest puste
                     if (!form.getValues("address") && address) {
                       form.setValue("address", address);
                     }

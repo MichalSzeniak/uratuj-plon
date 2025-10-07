@@ -3,6 +3,8 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { toast } from "sonner";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -173,7 +175,6 @@ export function LocationPicker({
       onAddressSelect?.(address);
     }
 
-    // Centruj mapę na wybranej lokalizacji
     if (mapRef.current) {
       mapRef.current.setView([lat, lng], 16);
     }
@@ -217,8 +218,32 @@ export function LocationPicker({
   }, [initialLocation, initialAddress]);
 
   return (
-    <div className="space-y-3">
-      {/* Wyszukiwanie adresu */}
+    <div className="space-y-3 ">
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-gray-700">
+          🔍 Wyszukaj adres
+        </label>
+        <div className="flex gap-2">
+          <Input
+            type="text"
+            value={addressInput}
+            onChange={(e) => setAddressInput(e.target.value)}
+            placeholder="Wpisz adres (ulica, miasto, kod pocztowy)..."
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            onKeyPress={(e) => e.key === "Enter" && handleAddressSearch()}
+          />
+          <Button
+            onClick={handleAddressSearch}
+            disabled={isSearching || !addressInput.trim()}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          >
+            {isSearching ? "..." : "Szukaj"}
+          </Button>
+        </div>
+        <p className="text-xs text-gray-500">
+          Wpisz adres i kliknij "Szukaj", lub kliknij bezpośrednio na mapie
+        </p>
+      </div>
 
       <div className="text-sm text-gray-600 bg-blue-50 p-3 rounded-lg">
         <p className="font-medium">🗺️ Jak ustawić lokalizację:</p>
@@ -229,33 +254,6 @@ export function LocationPicker({
           <li>Mapa automatycznie przeniesie się do wybranej lokalizacji</li>
           <li>Czerwony znacznik pokaże dokładną pozycję</li>
         </ol>
-      </div>
-
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-gray-700">
-          🔍 Wyszukaj adres
-        </label>
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={addressInput}
-            onChange={(e) => setAddressInput(e.target.value)}
-            placeholder="Wpisz adres (ulica, miasto, kod pocztowy)..."
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            onKeyPress={(e) => e.key === "Enter" && handleAddressSearch()}
-          />
-          <button
-            type="button"
-            onClick={handleAddressSearch}
-            disabled={isSearching || !addressInput.trim()}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-          >
-            {isSearching ? "..." : "Szukaj"}
-          </button>
-        </div>
-        <p className="text-xs text-gray-500">
-          Wpisz adres i kliknij "Szukaj", lub kliknij bezpośrednio na mapie
-        </p>
       </div>
 
       <div
