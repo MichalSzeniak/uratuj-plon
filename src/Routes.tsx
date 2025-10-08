@@ -18,7 +18,6 @@ export function AppRoutes() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
-
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path="/listings" element={<ListingsPage />} />
