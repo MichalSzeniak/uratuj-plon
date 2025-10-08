@@ -24,7 +24,7 @@ export default function handler(req, res) {
       </html>
     `);
   } else {
-    res.redirect(302, `/ogloszenie/${id}?client=true`);
+    res.redirect(302, `/listing/${id}?client=true`);
   }
 }
 
