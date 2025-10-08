@@ -52,7 +52,7 @@ export default async function handler(req, res) {
       <!-- Redirect do prawdziwej strony -->
       <script>
         setTimeout(() => {
-          window.location.href = '/blog/${post.slug}'
+          window.location.href = '/listing/${post.slug}'
         }, 100)
       </script>
     </head>
