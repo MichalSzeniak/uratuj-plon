@@ -374,14 +374,16 @@
   transition: opacity 0.3s ease;
 }
 
-.leaflet-control-attribution:hover {
-  opacity: 1;
-}
-
 /* W index.css */
 .leaflet-container {
   cursor: default !important;
 }
+
+.leaflet-control-attribution:hover {
+  opacity: 1;
+}
+
+
 
 /* Pokazuje granice kiedy użytkownik dojedzie do krawędzi */
 .leaflet-container.reached-bounds {
