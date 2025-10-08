@@ -7,9 +7,19 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+node_modules/
+/dist/
+/dist-ssr/
 *.local
 
 # Editor directories and files
@@ -22,3 +32,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Build outputs
+build/
