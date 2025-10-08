@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet-async";
+// import { Helmet } from "react-helmet-async";
 
 type Props = {
   title: string;
@@ -23,7 +23,7 @@ export default function SEO({
     "RatujPlon pomaga rolnikom w sprzedaży i przekazywaniu nadwyżek plonów lokalnie.";
 
   return (
-    <Helmet>
+    <>
       {/* Podstawowe */}
       <title>{fullTitle}</title>
       <meta name="description" content={fullDescription} />
@@ -45,6 +45,6 @@ export default function SEO({
 
       {/* SEO – roboty */}
       <meta name="robots" content="index, follow" />
-    </Helmet>
+    </>
   );
 }
