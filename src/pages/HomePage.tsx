@@ -3,9 +3,22 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { FarmMap } from "@/components/maps/FarmMap";
 import SEO from "@/components/SEO";
+// import { supabase } from "@/lib/supabase";
 
 export function HomePage() {
   const [showRescueOnly, setShowRescueOnly] = useState(false);
+
+  // const tets = async () => {
+  //   const { data, error } = await supabase
+  //     .from("listings")
+  //     .select("title, description")
+  //     .eq("id", "b9e91b1d-7c24-465e-9015-cd1e63eeec57")
+  //     .single();
+
+  //   console.log(data);
+
+  //   console.log(error);
+  // };
 
   return (
     <>
@@ -28,6 +41,8 @@ export function HomePage() {
                 : "Odkryj lokalne gospodarstwa rolne, kupuj świeże produkty bezpośrednio od rolników i wspieraj wieś w swojej okolicy."}
             </p>
           </div>
+
+          {/* <Button onClick={() => tets()}>test</Button> */}
 
           <Button
             variant={showRescueOnly ? "destructive" : "outline"}

@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
   const { data, error } = await supabase
     .from('listings')
-    .select('title, description, image_url')
+    .select('title, description')
     .eq('id', id)
     .single();
 
@@ -29,7 +29,7 @@ export default async function handler(req, res) {
         <meta name="description" content="${description}" />
         <meta property="og:title" content="${title}" />
         <meta property="og:description" content="${description}" />
-        <meta property="og:image" content="${image_url || "https://ratujplon.pl/og-image.jpg"}" />
+        <meta property="og:image" content="https://ratujplon.pl/og-image.jpg" />
         <meta property="og:url" content="https://ratujplon.pl/listing/${id}" />
         <meta property="og:type" content="article" />
         <meta name="twitter:card" content="summary_large_image" />
