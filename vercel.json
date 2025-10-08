@@ -1,8 +1,6 @@
 {
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/middleware.js"
-    }
+  "rewrites": [
+    { "source": "/listing/:id", "destination": "/api/og/:id" },
+    { "source": "/(.*)", "destination": "/" }
   ]
 }
