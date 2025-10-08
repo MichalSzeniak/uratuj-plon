@@ -133,8 +133,8 @@ export function ListingPage() {
     <>
       <SEO
         url={currentUrl}
-        title={`RatujPlon - ${listing.title} w ${listing.address} | Kup lub oddaj plony`}
-        description={`Rolnik z ${listing.address} oferuje ${listing.title}. Kupuj lokalnie lub przekaż nadwyżki plonów i wspieraj lokalne gospodarstwa. Sprawdź ofertę na RatujPlon!`}
+        title={`Ratuj plon - ${listing.title} w ${listing.address} | Kup lub oddaj plony`}
+        description={`Rolnik z ${listing.address} oferuje ${listing.title}. Kupuj lokalnie lub przekaż nadwyżki plonów i wspieraj lokalne gospodarstwa. Sprawdź ofertę na Ratuj plon!`}
       />
 
       <section className="min-h-screen bg-gray-50">
