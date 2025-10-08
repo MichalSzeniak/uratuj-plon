@@ -6,10 +6,14 @@
         {
           "type": "header",
           "key": "user-agent",
-          "value": "(facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp)"
+          "value": "(facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot)"
         }
       ],
-      "destination": "/api/listing/:slug"
+      "destination": "/api/listing?slug=:slug"
+    },
+    {
+      "source": "/api/listing",
+      "destination": "/api/listing.js"
     },
     {
       "source": "/(.*)",
