@@ -1,6 +1,21 @@
 {
+  "routes": [
+    {
+      "src": "/listing/(.*)",
+      "headers": {
+        "Cache-Control": "s-maxage=3600"
+      },
+      "continue": true
+    },
+    {
+      "src": "/listing/(.*)",
+      "dest": "/index.html"
+    }
+  ],
   "rewrites": [
-    { "source": "/listing/:id", "destination": "/api/og/:id" },
-    { "source": "/(.*)", "destination": "/" }
+    {
+      "source": "/listing/:id",
+      "destination": "/index.html"
+    }
   ]
 }
