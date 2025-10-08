@@ -1,23 +1,8 @@
 {
-  "rewrites": [
+  "routes": [
     {
-      "source": "/listing/:slug",
-      "has": [
-        {
-          "type": "header",
-          "key": "user-agent",
-          "value": "(facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot)"
-        }
-      ],
-      "destination": "/api/listing?slug=:slug"
-    },
-    {
-      "source": "/api/listing",
-      "destination": "/api/listing.js"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "src": "/(.*)",
+      "dest": "/middleware.js"
     }
   ]
 }
