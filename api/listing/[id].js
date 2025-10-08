@@ -8,17 +8,24 @@ const supabase = createClient(
 
 export default function handler(req, res) {
   const { id } = req.query;
-  res.setHeader("Content-Type", "text/html");
-  res.status(200).send(`
-    <html>
-      <head>
-        <meta property="og:title" content="Testowy tytuł ${id}" />
-      </head>
-      <body>
-        <script>window.location.href="/listing/${id}"</script>
-      </body>
-    </html>
-  `);
+
+  const ua = req.headers['user-agent'] || '';
+  const isBot = /facebookexternalhit|Twitterbot|LinkedInBot|Slackbot/i.test(ua);
+
+  if (isBot) {
+    res.setHeader("Content-Type", "text/html");
+    res.status(200).send(`
+      <html>
+        <head>
+          <meta property="og:title" content="Testowy tytuł ${id}" />
+          <meta property="og:description" content="Opis testowy ${id}" />
+        </head>
+        <body></body>
+      </html>
+    `);
+  } else {
+    res.redirect(302, `/ogloszenie/${id}?client=true`);
+  }
 }
 
 // export default async function handler(req, res) {
