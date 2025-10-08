@@ -22,7 +22,6 @@ export function AppRoutes() {
         <Route path="/listings" element={<ListingsPage />} />
         <Route path="/listing/:id" element={<ListingPage />} />
         {/* <Route path="/rescue" element={<RescueView />} /> */}
-        {/* DODANA STRONA PROFILU */}
         <Route
           path="/profile"
           element={
