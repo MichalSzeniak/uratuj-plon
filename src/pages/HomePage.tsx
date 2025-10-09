@@ -20,6 +20,22 @@ export function HomePage() {
   //   console.log(error);
   // };
 
+  const SUPABASE_URL = "https://pqyzdbynswnvmzhhwdtw.supabase.co";
+  const SUPABASE_ANON_KEY =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBxeXpkYnluc3dudm16aGh3ZHR3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1OTY2NjkwNSwiZXhwIjoyMDc1MjQyOTA1fQ.I-tTYqMtcA6Y7yR8fbDm6wcLEHarMWc3Gby5BkoLyfo";
+
+  fetch(
+    `${SUPABASE_URL}/rest/v1/listings?id=eq.b9e91b1d-7c24-465e-9015-cd1e63eeec57`,
+    {
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+      },
+    }
+  )
+    .then((r) => r.json())
+    .then(console.log);
+
   return (
     <>
       <SEO
