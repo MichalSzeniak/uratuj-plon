@@ -1,6 +1,7 @@
 {
   "routes": [
-    { "src": "/listing/(.*)", "dest": "/api/og.js" },
+    { "handle": "filesystem" },
+    { "src": "/listing/(.*)", "dest": "/api/listing/[...id].js" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
