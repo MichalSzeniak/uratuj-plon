@@ -1,10 +1,4 @@
 {
-  "builds": [
-    {
-      "src": "api/render.ts",
-      "use": "@vercel/edge"
-    }
-  ],
   "routes": [
     {
       "src": "/assets/(.*)",
@@ -20,7 +14,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/api/render.ts"
+      "dest": "/api/render.js"
     }
   ]
 }
