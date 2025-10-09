@@ -1,20 +1,8 @@
 {
   "routes": [
     {
-      "src": "/assets/(.*)",
-      "dest": "/assets/$1"
-    },
-    {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
-    },
-    {
-      "src": "/favicon.ico",
-      "dest": "/favicon.ico"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/api/render.js"
+      "src": "/listing/(.*)",
+      "dest": "/api/listing/[...id].js"
     }
   ]
 }
