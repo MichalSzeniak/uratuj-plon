@@ -14,8 +14,8 @@ function App() {
         <Router>
           <AuthProvider>
             <div className="min-h-screen ">
-              <AppRoutes />
               <Toaster />
+              <AppRoutes />
             </div>
           </AuthProvider>
         </Router>
