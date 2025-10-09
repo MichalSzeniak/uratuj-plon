@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 import { useCurrentTheme, useTheme } from "./theme-provider";
 
 const ThemeToggle = () => {
-  const { theme, setTheme } = useTheme();
+  const { setTheme } = useTheme();
   const currentTheme = useCurrentTheme();
 
   return (
