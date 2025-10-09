@@ -15,8 +15,8 @@ export default async function handler(request) {
     let listingData = null;
 
     try {
-      const SUPABASE_URL = Deno.env.get("VITE_SUPABASE_URL");
-      const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+      const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
+      const SUPABASE_ANON_KEY = process.env.VITE_SUPABASE_SERVICE_KEY;
 
       if (SUPABASE_URL && SUPABASE_ANON_KEY) {
         const resp = await fetch(
