@@ -1,39 +1,62 @@
-import { Helmet } from "react-helmet-async";
+// components/MetaTags.jsx
+import { useEffect } from "react";
 
 const MetaTags = ({
   title = "Default Title",
   description = "Default description",
-  image = "https://www.ratujplon.pl/og-image.jpg",
-  url = window.location.href,
+  image = "/default-image.jpg",
+  url = "",
   type = "website",
   keywords = "",
 }) => {
-  return (
-    <Helmet>
-      {/* Podstawowe meta tagi */}
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      <meta name="keywords" content={keywords} />
+  useEffect(() => {
+    // Aktualizacja title
+    document.title = title;
 
-      {/* Open Graph (Facebook) */}
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
-      <meta property="og:url" content={url} />
-      <meta property="og:type" content={type} />
-      <meta property="og:site_name" content="Your Site Name" />
+    // Aktualizacja lub tworzenie meta tagów
+    const updateMetaTag = (name, content, attribute = "name") => {
+      let metaTag = document.querySelector(`meta[${attribute}="${name}"]`);
+      if (!metaTag) {
+        metaTag = document.createElement("meta");
+        metaTag.setAttribute(attribute, name);
+        document.head.appendChild(metaTag);
+      }
+      metaTag.setAttribute("content", content);
+    };
 
-      {/* Twitter Card */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={image} />
-      <meta name="twitter:site" content="@yourtwitterhandle" />
+    // Basic meta tags
+    updateMetaTag("description", description);
+    updateMetaTag("keywords", keywords);
 
-      {/* Dodatkowe tagi */}
-      <link rel="canonical" href={url} />
-    </Helmet>
-  );
+    // Open Graph
+    updateMetaTag("og:title", title, "property");
+    updateMetaTag("og:description", description, "property");
+    updateMetaTag("og:image", image, "property");
+    updateMetaTag("og:url", url || window.location.href, "property");
+    updateMetaTag("og:type", type, "property");
+
+    // Twitter
+    updateMetaTag("twitter:card", "summary_large_image");
+    updateMetaTag("twitter:title", title);
+    updateMetaTag("twitter:description", description);
+    updateMetaTag("twitter:image", image);
+
+    // Canonical URL
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.setAttribute("rel", "canonical");
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute("href", url || window.location.href);
+
+    // Cleanup function
+    return () => {
+      // Możesz dodać cleanup jeśli potrzebujesz
+    };
+  }, [title, description, image, url, type, keywords]);
+
+  return null; // Ten komponent nie renderuje nic w DOM
 };
 
 export default MetaTags;

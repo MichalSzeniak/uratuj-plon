@@ -1,5 +1,3 @@
-// import { Helmet } from "react-helmet-async";
-
 type Props = {
   title: string;
   description: string;
