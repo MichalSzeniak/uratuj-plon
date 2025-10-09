@@ -11,7 +11,6 @@ import { ListingContact } from "@/components/listing/ListingContact";
 import { MapNavigation } from "@/components/listing/MapNavigation";
 import { ArrowLeft, Package } from "lucide-react";
 // import SEO from "@/components/SEO";
-import MetaTags from "@/components/MetaTags";
 
 interface Listing {
   id: string;
@@ -137,13 +136,6 @@ export function ListingPage() {
         title={`Ratuj plon - ${listing.title} w ${listing.address} | Kup lub oddaj plony`}
         description={`Rolnik z ${listing.address} oferuje ${listing.title}. Kupuj lokalnie lub przekaż nadwyżki plonów i wspieraj lokalne gospodarstwa. Sprawdź ofertę na Ratuj plon!`}
       /> */}
-
-      <MetaTags
-        title="Strona Główna 2 - Moja Aplikacja produkt"
-        description="Witaj na stronie głównej naszej aplikacji. Odkryj niesamowite funkcjonalności."
-        image="https://ratujplon.pl/og-image2.jpg"
-        keywords="strona główna, aplikacja, react, supabase"
-      />
 
       <section className="min-h-screen bg-gray-50">
         <div className="bg-white border-b sticky top-0 z-10">

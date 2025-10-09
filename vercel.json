@@ -1,12 +1,15 @@
 {
-  "routes": [
+  "rewrites": [
     {
-      "src": "/listing/(.*)",
-      "dest": "/api/meta?path=/listing/$1"
-    },
+      "source": "/:path*",
+      "destination": "/index.html"
+    }
+  ],
+  "redirects": [
     {
-      "src": "/((?!api/).*)",
-      "dest": "/index.html"
+      "source": "/share/:path*",
+      "destination": "/api/og/:path*",
+      "permanent": false
     }
   ]
 }
