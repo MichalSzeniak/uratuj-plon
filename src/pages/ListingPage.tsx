@@ -10,7 +10,7 @@ import { ListingGallery } from "@/components/listing/ListingGallery";
 import { ListingContact } from "@/components/listing/ListingContact";
 import { MapNavigation } from "@/components/listing/MapNavigation";
 import { ArrowLeft, Package } from "lucide-react";
-import SEO from "@/components/SEO";
+// import SEO from "@/components/SEO";
 import MetaTags from "@/components/MetaTags";
 
 interface Listing {

@@ -10,7 +10,6 @@ import { ListingPage } from "./pages/ListingPage";
 // import { RescueView } from "./components/rescue/RescueView";
 import { AdminRoute } from "./components/auth/AdminRoute";
 import { AdminPage } from "./pages/AdminPage";
-// import { HelmetProvider } from "react-helmet-async";
 
 export function AppRoutes() {
   return (
