@@ -1,21 +1,23 @@
 {
-  "routes": [
-    {
-      "src": "/listing/(.*)",
-      "headers": {
-        "Cache-Control": "s-maxage=3600"
-      },
-      "continue": true
-    },
-    {
-      "src": "/listing/(.*)",
-      "dest": "/index.html"
-    }
-  ],
   "rewrites": [
     {
-      "source": "/listing/:id",
+      "source": "/(.*)",
       "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        }
+      ]
     }
   ]
 }

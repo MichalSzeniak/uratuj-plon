@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { FarmMap } from "@/components/maps/FarmMap";
-import SEO from "@/components/SEO";
+import MetaTags from "@/components/MetaTags";
+// import SEO from "@/components/SEO";
 // import { supabase } from "@/lib/supabase";
 
 export function HomePage() {
@@ -22,9 +23,16 @@ export function HomePage() {
 
   return (
     <>
-      <SEO
+      {/* <SEO
         title="Znajdź rolnika w swojej okolicy | Pomóż, kup lub przekaż plony - RatujPlon"
         description="Znajdź rolników w swojej okolicy, kupuj lokalne produkty prosto z gospodarstw i pomóż ratować plony przed zmarnowaniem."
+      /> */}
+
+      <MetaTags
+        title="Strona Główna - Moja Aplikacja"
+        description="Witaj na stronie głównej naszej aplikacji. Odkryj niesamowite funkcjonalności."
+        image="/og-image.jpg"
+        keywords="strona główna, aplikacja, react, supabase"
       />
 
       <section className="space-y-10 py-8">
