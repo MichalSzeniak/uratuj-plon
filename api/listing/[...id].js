@@ -124,7 +124,7 @@ export default async function handler(request) {
       },
     });
   } catch (error) {
-    console.error("Błąd w funkcji Edge:", error);
+    console.error("Błąd Edge:", error);
 
     // Zwróć podstawowy HTML jako fallback w razie błędu
     return new Response(
