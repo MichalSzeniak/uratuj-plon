@@ -7,7 +7,7 @@
   ],
   "redirects": [
     {
-      "source": "/share/:path*",
+      "source": "/listing/:path*",
       "destination": "/api/og/:path*",
       "permanent": false
     }
