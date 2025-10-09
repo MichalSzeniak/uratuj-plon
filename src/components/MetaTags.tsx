@@ -14,7 +14,11 @@ const MetaTags = ({
     document.title = title;
 
     // Aktualizacja lub tworzenie meta tagów
-    const updateMetaTag = (name, content, attribute = "name") => {
+    const updateMetaTag = (
+      name: string,
+      content: string,
+      attribute = "name"
+    ) => {
       let metaTag = document.querySelector(`meta[${attribute}="${name}"]`);
       if (!metaTag) {
         metaTag = document.createElement("meta");
