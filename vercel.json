@@ -1,15 +1,16 @@
 {
   "rewrites": [
     {
+      "source": "/listing/:uuid",
+      "destination": "/api/og.js"
+    },
+    {
+      "source": "/share/listing/:uuid",
+      "destination": "/api/og.js"
+    },
+    {
       "source": "/:path*",
       "destination": "/index.html"
-    }
-  ],
-  "redirects": [
-    {
-      "source": "/listing/:path*",
-      "destination": "/api/og/:path*",
-      "permanent": false
     }
   ]
 }
