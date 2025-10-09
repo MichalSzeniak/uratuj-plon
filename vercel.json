@@ -1,8 +1,12 @@
 {
-  "routes": [
+  "rewrites": [
     {
-      "src": "/listing/(.*)",
-      "dest": "/api/listing/[...id].js"
+      "source": "/listing/:id*",
+      "destination": "/api/listing/[...id]"
+    },
+    {
+      "source": "/((?!api/|assets/|.*\\..*).*)",
+      "destination": "/index.html"
     }
   ]
 }
