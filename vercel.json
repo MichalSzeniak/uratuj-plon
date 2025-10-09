@@ -1,16 +1,21 @@
 {
-  "rewrites": [
+  "version": 3,
+  "routes": [
     {
-      "source": "/listing/:uuid",
-      "destination": "/api/og.js"
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
     },
     {
-      "source": "/share/listing/:uuid",
-      "destination": "/api/og.js"
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
     },
     {
-      "source": "/:path*",
-      "destination": "/index.html"
+      "src": "/favicon.ico",
+      "dest": "/favicon.ico"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/api/render.ts"
     }
   ]
 }
