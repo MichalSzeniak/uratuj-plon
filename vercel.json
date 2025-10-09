@@ -1,12 +1,6 @@
 {
-  "rewrites": [
-    {
-      "source": "/listing/:id*",
-      "destination": "/api/listing/[...id]"
-    },
-    {
-      "source": "/((?!api/|assets/|.*\\..*).*)",
-      "destination": "/index.html"
-    }
+  "routes": [
+    { "src": "/listing/(.*)", "dest": "/api/og.js" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
