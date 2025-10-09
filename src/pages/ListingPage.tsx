@@ -87,10 +87,10 @@ export function ListingPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center ">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Ładowanie ogłoszenia...</p>
+          <p className="text-muted-foreground">Ładowanie ogłoszenia...</p>
         </div>
       </div>
     );
@@ -98,13 +98,13 @@ export function ListingPage() {
 
   if (error || !listing) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <div className="min-h-screen flex items-center justify-center  px-4">
         <div className="text-center max-w-md">
           <div className="text-6xl mb-4">😕</div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          <h1 className="text-2xl font-bold text-muted-foreground mb-2">
             Ogłoszenie nie znalezione
           </h1>
-          <p className="text-gray-600 mb-6">
+          <p className="text-muted-foreground mb-6">
             {error || "To ogłoszenie może zostać usunięte lub nie istnieje."}
           </p>
           <Link to="/">
@@ -137,8 +137,8 @@ export function ListingPage() {
         description={`Rolnik z ${listing.address} oferuje ${listing.title}. Kupuj lokalnie lub przekaż nadwyżki plonów i wspieraj lokalne gospodarstwa. Sprawdź ofertę na Ratuj plon!`}
       />
 
-      <section className="min-h-screen bg-gray-50">
-        <div className="bg-white border-b sticky top-0 z-10">
+      <section className="min-h-screen ">
+        <div className="border-b sticky top-0 z-10">
           <div className="max-w-7xl mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <Link
@@ -152,7 +152,7 @@ export function ListingPage() {
             </div>
 
             <div className="hidden lg:block mt-3">
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-3xl font-bold text-muted-foreground">
                 {listing.title}
               </h1>
               <div className="flex items-center gap-2 mt-2">
@@ -181,7 +181,7 @@ export function ListingPage() {
               <div className="lg:hidden">
                 <Card>
                   <CardContent className="p-4">
-                    <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                    <h1 className="text-2xl font-bold text-muted-foreground mb-2">
                       {listing.title}
                     </h1>
                     <div className="flex items-center gap-2 flex-wrap">
@@ -224,7 +224,7 @@ export function ListingPage() {
               <Card>
                 <CardContent className="p-6">
                   <h2 className="text-xl font-semibold mb-4">Opis</h2>
-                  <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                  <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
                     {listing.description || "Brak opisu."}
                   </p>
                 </CardContent>
@@ -236,7 +236,7 @@ export function ListingPage() {
                     <h2 className="text-xl font-semibold mb-4">
                       📋 Instrukcje odbioru
                     </h2>
-                    <p className="text-gray-700 whitespace-pre-line">
+                    <p className="text-muted-foreground whitespace-pre-line">
                       {listing.pickup_instructions}
                     </p>
                   </CardContent>
@@ -266,12 +266,12 @@ export function ListingPage() {
               <Card>
                 <CardContent className="p-6 py-0">
                   <h3 className="font-semibold mb-4 flex items-center gap-2">
-                    <Package className="h-5 w-5 text-gray-600" />
+                    <Package className="h-5 w-5 text-muted-foreground" />
                     Szczegóły oferty
                   </h3>
                   <div className="space-y-3">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Cena:</span>
+                      <span className="text-muted-foreground">Cena:</span>
                       <span className="font-semibold">
                         {listing.price_per_unit
                           ? `${listing.price_per_unit} zł/${listing.unit}`
@@ -281,7 +281,9 @@ export function ListingPage() {
 
                     {listing.estimated_amount && (
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Szacowana ilość:</span>
+                        <span className="text-muted-foreground">
+                          Szacowana ilość:
+                        </span>
                         <span>
                           {listing.estimated_amount} {listing.unit}
                         </span>
@@ -289,7 +291,9 @@ export function ListingPage() {
                     )}
 
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Dostępne od:</span>
+                      <span className="text-muted-foreground">
+                        Dostępne od:
+                      </span>
                       <span>
                         {new Date(listing.available_from).toLocaleDateString(
                           "pl-PL"
@@ -299,7 +303,9 @@ export function ListingPage() {
 
                     {listing.available_until && (
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Dostępne do:</span>
+                        <span className="text-muted-foreground">
+                          Dostępne do:
+                        </span>
                         <span>
                           {new Date(listing.available_until).toLocaleDateString(
                             "pl-PL"

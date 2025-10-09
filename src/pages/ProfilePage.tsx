@@ -14,7 +14,7 @@ export function ProfilePage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Ładowanie...</p>
+          <p className="text-muted-foreground">Ładowanie...</p>
         </div>
       </div>
     );
@@ -50,7 +50,7 @@ export function ProfilePage() {
             </div>
           )}
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-muted-foreground">
               {profile?.full_name ||
                 user.user_metadata?.full_name ||
                 user.email}
@@ -58,7 +58,7 @@ export function ProfilePage() {
             <p className="text-gray-500">{user.email}</p>
             <div className="flex items-center space-x-2 mt-1">
               <span className="text-sm text-gray-500">Dołączył:</span>
-              <span className="text-sm text-gray-700">
+              <span className="text-sm text-muted-foreground">
                 {new Date(
                   profile?.created_at || user.created_at
                 ).toLocaleDateString("pl-PL")}

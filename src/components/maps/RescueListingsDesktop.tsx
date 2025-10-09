@@ -13,7 +13,7 @@ export function RescueListingsDesktop({
   return (
     <div className="hidden md:block absolute top-4 right-4 z-10">
       <Card className="shadow-lg w-80 max-h-[calc(75vh)] overflow-hidden flex flex-col py-0 pb-3">
-        <div className="sticky top-0 bg-white border-b p-3 z-10">
+        <div className="sticky top-0 border-b p-3 z-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5 text-red-500" />

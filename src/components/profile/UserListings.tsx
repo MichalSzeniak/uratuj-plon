@@ -58,8 +58,10 @@ export function UserListings() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Moje Ogłoszenia</h2>
-          <p className="text-gray-600">
+          <h2 className="text-2xl font-bold text-muted-foreground">
+            Moje Ogłoszenia
+          </h2>
+          <p className="text-muted-foreground">
             Zarządzaj swoimi ogłoszeniami i akcjami ratunkowymi
           </p>
         </div>
@@ -73,7 +75,7 @@ export function UserListings() {
           <Card className="p-8 text-center">
             <div className="text-4xl mb-4">📝</div>
             <h3 className="text-lg font-semibold mb-2">Brak ogłoszeń</h3>
-            <p className="text-gray-600 mb-4">
+            <p className="text-muted-foreground mb-4">
               Nie masz jeszcze żadnych ogłoszeń. Dodaj pierwsze!
             </p>
             <Button>Dodaj pierwsze ogłoszenie</Button>
@@ -112,7 +114,7 @@ export function UserListings() {
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
                       <div className="flex-1">
-                        <h3 className="font-semibold text-lg text-gray-900 mb-1">
+                        <h3 className="font-semibold text-lg text-muted-foreground mb-1">
                           {listing.title}
                         </h3>
                         <div className="flex flex-wrap gap-2 mb-2">
@@ -138,7 +140,7 @@ export function UserListings() {
                     </div>
 
                     {listing.description && (
-                      <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                      <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
                         {listing.description}
                       </p>
                     )}

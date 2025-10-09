@@ -56,7 +56,7 @@ export function MobileMapControls({
         </div>
 
         <div className="mb-3">
-          <p className="text-xs text-gray-600 line-clamp-2">
+          <p className="text-xs text-muted-foreground line-clamp-2">
             {selectedListing.description || "Brak opisu"}
           </p>
           {selectedListing.address && (
@@ -69,7 +69,7 @@ export function MobileMapControls({
         <div className="flex justify-between gap-1">
           <Button
             onClick={onShowDetails}
-            className="flex-1 bg-green-600 hover:bg-green-700"
+            className="flex-1 bg-primary hover:bg-primary-foreground"
             size="sm"
           >
             <MapPin className="h-1 w-1 mr-0" />

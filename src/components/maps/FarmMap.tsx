@@ -202,15 +202,15 @@ export function FarmMap({ showRescueOnly = false }: FarmMapProps) {
         <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-90 z-10">
           <div className="text-center p-8">
             <div className="text-6xl mb-4">🌱</div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            <h3 className="text-xl font-semibold text-muted-foreground mb-2">
               {showRescueOnly ? "Brak akcji ratunkowych" : "Brak ogłoszeń"}
             </h3>
-            <p className="text-gray-600 mb-4">
+            <p className="text-muted-foreground mb-4">
               {showRescueOnly
                 ? "Obecnie nie ma żadnych akcji ratunkowych w Twojej okolicy."
                 : "Jeszcze nie ma ogłoszeń w naszej bazie. Bądź pierwszy!"}
             </p>
-            <button className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600">
+            <button className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-primary">
               Dodaj pierwsze ogłoszenie
             </button>
           </div>

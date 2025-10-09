@@ -118,20 +118,20 @@ export function ListingsList() {
           <div className="text-lg font-bold text-green-600">
             {listings?.length || 0}
           </div>
-          <div className="text-xs text-gray-600">Ogłoszenia</div>
+          <div className="text-xs text-muted-foreground">Ogłoszenia</div>
         </Card>
         <Card className="p-3 text-center">
           <div className="text-lg font-bold text-red-600">
             {listings?.filter((l) => l.price_type === "rescue").length || 0}
           </div>
-          <div className="text-xs text-gray-600">Ratunkowe</div>
+          <div className="text-xs text-muted-foreground">Ratunkowe</div>
         </Card>
         <Card className="p-3 text-center">
           <div className="text-lg font-bold text-blue-600">
             {listings?.filter((l) => l.price_type === "pick_your_own").length ||
               0}
           </div>
-          <div className="text-xs text-gray-600">Zbierz sam</div>
+          <div className="text-xs text-muted-foreground">Zbierz sam</div>
         </Card>
       </div>
 
@@ -141,7 +141,7 @@ export function ListingsList() {
           <Card className="p-6 text-center">
             <div className="text-3xl mb-3">🔍</div>
             <h3 className="text-base font-semibold mb-1">Brak ogłoszeń</h3>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-muted-foreground">
               {searchTerm ||
               productFilter !== "all" ||
               priceTypeFilter !== "all"
@@ -218,7 +218,7 @@ function CompactListingCard({ listing }: { listing: any }) {
             {/* Nagłówek z tytułem i ceną */}
             <div className="flex items-start justify-between gap-2 mb-1">
               <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-gray-900 text-sm leading-tight truncate">
+                <h3 className="font-semibold text-muted-foreground text-sm leading-tight truncate">
                   {listing.title}
                 </h3>
 
@@ -267,7 +267,7 @@ function CompactListingCard({ listing }: { listing: any }) {
 
             {/* Opis */}
             {listing.description && (
-              <p className="text-gray-600 text-xs mb-2 line-clamp-2 leading-relaxed">
+              <p className="text-muted-foreground text-xs mb-2 line-clamp-2 leading-relaxed">
                 {listing.description}
               </p>
             )}

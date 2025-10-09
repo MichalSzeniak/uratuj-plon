@@ -38,9 +38,9 @@ export function MapNavigation({ listing }: MapNavigationProps) {
         </div>
 
         <span>
-          <p className="text-gray-700">{listing.address}</p>
+          <p className="text-muted-foreground">{listing.address}</p>
           {listing.city && (
-            <p className="text-gray-600 mt-1">
+            <p className="text-muted-foreground mt-1">
               {listing.city}, {listing.region}
             </p>
           )}

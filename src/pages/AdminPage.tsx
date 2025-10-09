@@ -81,20 +81,20 @@ export function AdminPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Ładowanie ogłoszeń...</p>
+          <p className="text-muted-foreground">Ładowanie ogłoszeń...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen  py-8">
       <div className="max-w-6xl mx-auto px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-muted-foreground mb-2">
             👮 Panel Administratora
           </h1>
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             Zarządzaj ogłoszeniami oczekującymi na zatwierdzenie
           </p>
 
@@ -103,7 +103,7 @@ export function AdminPage() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Oczekujące</p>
+                    <p className="text-sm text-muted-foreground">Oczekujące</p>
                     <p className="text-2xl font-bold text-amber-600">
                       {pendingListings?.length || 0}
                     </p>
@@ -120,10 +120,10 @@ export function AdminPage() {
             <Card>
               <CardContent className="p-8 text-center">
                 <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                <h3 className="text-lg font-semibold text-muted-foreground mb-2">
                   Brak ogłoszeń do zatwierdzenia
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-muted-foreground">
                   Wszystkie ogłoszenia zostały już przejrzane.
                 </p>
               </CardContent>

@@ -138,7 +138,7 @@ export function RescueListingsMobile({
           </SheetHeader>
 
           {/* Lista zajmująca całą dostępną przestrzeń */}
-          <div className="h-full overflow-y-auto p-4 bg-gray-50">
+          <div className="h-full overflow-y-auto p-4 ">
             <div className="space-y-4">
               {listings.map((listing) => (
                 <RescueCard

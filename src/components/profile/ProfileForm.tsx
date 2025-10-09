@@ -73,7 +73,7 @@ export function ProfileForm() {
           <h2 className="text-xl font-semibold">Profil Użytkownika</h2>
           <button
             onClick={() => setIsEditing(true)}
-            className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-600"
+            className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-primary"
           >
             Edytuj Profil
           </button>
@@ -84,17 +84,21 @@ export function ProfileForm() {
             <label className="text-sm font-medium text-gray-500">
               Nazwa użytkownika
             </label>
-            <p className="text-gray-900">{profile?.username || "Brak"}</p>
+            <p className="text-muted-foreground">
+              {profile?.username || "Brak"}
+            </p>
           </div>
           <div>
             <label className="text-sm font-medium text-gray-500">
               Imię i nazwisko
             </label>
-            <p className="text-gray-900">{profile?.full_name || "Brak"}</p>
+            <p className="text-muted-foreground">
+              {profile?.full_name || "Brak"}
+            </p>
           </div>
           <div>
             <label className="text-sm font-medium text-gray-500">Rola</label>
-            <p className="text-gray-900 capitalize">
+            <p className="text-muted-foreground capitalize">
               {profile?.role === "farmer" && "👨‍🌾 Rolnik"}
               {profile?.role === "customer" && "🛒 Klient"}
               {profile?.role === "collector" && "🌱 Zbieracz"}
@@ -102,11 +106,13 @@ export function ProfileForm() {
           </div>
           <div>
             <label className="text-sm font-medium text-gray-500">Bio</label>
-            <p className="text-gray-900">{profile?.bio || "Brak opisu"}</p>
+            <p className="text-muted-foreground">
+              {profile?.bio || "Brak opisu"}
+            </p>
           </div>
           <div>
             <label className="text-sm font-medium text-gray-500">Telefon</label>
-            <p className="text-gray-900">{profile?.phone || "Brak"}</p>
+            <p className="text-muted-foreground">{profile?.phone || "Brak"}</p>
           </div>
         </div>
       </div>
@@ -121,7 +127,7 @@ export function ProfileForm() {
         <div>
           <label
             htmlFor="username"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-muted-foreground"
           >
             Nazwa użytkownika
           </label>
@@ -139,7 +145,7 @@ export function ProfileForm() {
         <div>
           <label
             htmlFor="full_name"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-muted-foreground"
           >
             Imię i nazwisko
           </label>
@@ -157,7 +163,7 @@ export function ProfileForm() {
         <div>
           <label
             htmlFor="role"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-muted-foreground"
           >
             Rola
           </label>
@@ -178,7 +184,7 @@ export function ProfileForm() {
         <div>
           <label
             htmlFor="bio"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-muted-foreground"
           >
             Opis
           </label>
@@ -195,7 +201,7 @@ export function ProfileForm() {
         <div>
           <label
             htmlFor="phone"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-muted-foreground"
           >
             Telefon
           </label>
@@ -214,14 +220,14 @@ export function ProfileForm() {
           <button
             type="submit"
             disabled={updateProfile.isPending}
-            className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 disabled:opacity-50"
+            className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-primary disabled:opacity-50"
           >
             {updateProfile.isPending ? "Zapisywanie..." : "Zapisz zmiany"}
           </button>
           <button
             type="button"
             onClick={handleCancel}
-            className="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400"
+            className="bg-gray-300 text-muted-foreground px-6 py-2 rounded-lg hover:bg-gray-400"
           >
             Anuluj
           </button>

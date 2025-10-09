@@ -33,7 +33,7 @@ export function RescueListItem({
   return (
     <div
       className={cn(
-        "p-4 cursor-pointer transition-colors border-l-4 hover:bg-gray-50",
+        "p-4 cursor-pointer transition-colors border-l-4 hover:",
         isSelected
           ? "bg-blue-50 border-l-blue-500 border-l-4"
           : "border-l-transparent hover:border-l-gray-200"
@@ -42,7 +42,7 @@ export function RescueListItem({
     >
       {/* Nagłówek */}
       <div className="flex justify-between items-start mb-2">
-        <h3 className="font-semibold text-gray-900 line-clamp-2 flex-1 pr-2">
+        <h3 className="font-semibold text-muted-foreground line-clamp-2 flex-1 pr-2">
           {listing.title}
         </h3>
         {isUrgent && (
@@ -69,7 +69,7 @@ export function RescueListItem({
       </div>
 
       {/* Informacje */}
-      <div className="space-y-1 text-sm text-gray-600 mb-2">
+      <div className="space-y-1 text-sm text-muted-foreground mb-2">
         <div className="flex items-center gap-1">
           <MapPin className="h-3 w-3 flex-shrink-0" />
           <span className="line-clamp-1">{listing.address}</span>

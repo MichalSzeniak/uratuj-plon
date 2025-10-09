@@ -59,12 +59,12 @@ export function ContactModal({
         <div className="space-y-4">
           <div className="text-center">
             <p className="font-semibold">{listing.user?.full_name}</p>
-            <p className="text-sm text-gray-600">{listing.title}</p>
+            <p className="text-sm text-muted-foreground">{listing.title}</p>
           </div>
 
           <div className="space-y-2">
             {phoneNumber && (
-              <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+              <div className="flex justify-between items-center p-3 rounded-lg">
                 <span>Numer telefonu:</span>
                 <span className="font-mono">{phoneNumber}</span>
                 <Button variant="ghost" size="sm" onClick={handleCopyNumber}>

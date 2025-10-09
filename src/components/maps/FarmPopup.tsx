@@ -28,7 +28,7 @@ export function FarmPopup({ listing }: FarmPopupProps) {
     <div className="min-w-[280px] max-w-[320px]">
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1 mr-2">
-          <h3 className="font-semibold text-gray-900 text-sm leading-tight line-clamp-2">
+          <h3 className="font-semibold text-muted-foreground text-sm leading-tight line-clamp-2">
             {listing.title}
           </h3>
           <div className="flex items-center gap-2 mt-1 flex-wrap">
@@ -66,7 +66,7 @@ export function FarmPopup({ listing }: FarmPopupProps) {
       )}
 
       <div className="mb-3">
-        <p className="text-xs text-gray-600 line-clamp-2 mb-2">
+        <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
           {listing.description || "Brak opisu"}
         </p>
         {listing.address && (
@@ -80,7 +80,7 @@ export function FarmPopup({ listing }: FarmPopupProps) {
       <div className="flex gap-2 mb-3">
         <Button
           onClick={handleShowDetails}
-          className="flex-1 bg-green-600 hover:bg-green-700"
+          className="flex-1 bg-main hover:bg-lime-800 text-white font-semibold"
           size="sm"
         >
           <MapPin className="h-1 w-1 mr-0" />

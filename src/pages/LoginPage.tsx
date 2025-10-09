@@ -30,7 +30,9 @@ export function LoginPage() {
     <div className="min-h-screen flex items-center justify-center ">
       <div className="max-w-md  flex flex-col items-center space-y-8">
         <Logo textClassName="text-4xl" className="w-16 h-28 items-center" />
-        <p className="mt-2 text-gray-600">Dołącz do społeczności rolników</p>
+        <p className="mt-2 text-muted-foreground">
+          Dołącz do społeczności rolników
+        </p>
 
         <div>
           <Button
@@ -38,7 +40,7 @@ export function LoginPage() {
             disabled={isLoading}
             variant="outline"
             size="lg"
-            // className="w-full max-w-xs mx-auto flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+            // className="w-full max-w-xs mx-auto flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-white text-muted-foreground hover: disabled:opacity-50"
           >
             <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
               <path

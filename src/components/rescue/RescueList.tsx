@@ -154,7 +154,7 @@
 //       <div className="flex-1 flex items-center justify-center">
 //         <div className="text-center">
 //           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600 mx-auto mb-2"></div>
-//           <p className="text-gray-600">Ładowanie akcji ratunkowych...</p>
+//           <p className="text-muted-foreground">Ładowanie akcji ratunkowych...</p>
 //         </div>
 //       </div>
 //     );
@@ -177,7 +177,7 @@
 //       {renderLocationStatus()}
 
 //       {/* Statystyki */}
-//       <div className="p-4 border-b bg-gray-50">
+//       <div className="p-4 border-b ">
 //         <div className="flex justify-between items-center text-sm">
 //           <span className="font-medium">
 //             {filteredListings.length} akcji ratunkowych

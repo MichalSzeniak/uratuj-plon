@@ -27,7 +27,7 @@ export function RescueCard({ listing, onAction }: RescueCardProps) {
         {/* Nagłówek z tytułem i ceną */}
         <div className="flex justify-between items-start mb-2">
           <h4
-            className="font-semibold text-gray-900 text-sm leading-tight flex-1 mr-2 line-clamp-2"
+            className="font-semibold text-muted-foreground text-sm leading-tight flex-1 mr-2 line-clamp-2"
             title={listing.title}
           >
             {listing.title}
@@ -42,7 +42,7 @@ export function RescueCard({ listing, onAction }: RescueCardProps) {
         {/* Opis */}
         {listing.description && (
           <p
-            className="text-xs text-gray-600 mb-2 line-clamp-2"
+            className="text-xs text-muted-foreground mb-2 line-clamp-2"
             title={listing.description}
           >
             {listing.description}

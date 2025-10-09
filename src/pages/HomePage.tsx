@@ -8,34 +8,6 @@ import SEO from "@/components/SEO";
 export function HomePage() {
   const [showRescueOnly, setShowRescueOnly] = useState(false);
 
-  // const tets = async () => {
-  //   const { data, error } = await supabase
-  //     .from("listings")
-  //     .select("title, description")
-  //     .eq("id", "b9e91b1d-7c24-465e-9015-cd1e63eeec57")
-  //     .single();
-
-  //   console.log(data);
-
-  //   console.log(error);
-  // };
-
-  const SUPABASE_URL = "https://pqyzdbynswnvmzhhwdtw.supabase.co";
-  const SUPABASE_ANON_KEY =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBxeXpkYnluc3dudm16aGh3ZHR3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1OTY2NjkwNSwiZXhwIjoyMDc1MjQyOTA1fQ.I-tTYqMtcA6Y7yR8fbDm6wcLEHarMWc3Gby5BkoLyfo";
-
-  fetch(
-    `${SUPABASE_URL}/rest/v1/listings?id=eq.b9e91b1d-7c24-465e-9015-cd1e63eeec57`,
-    {
-      headers: {
-        apikey: SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-      },
-    }
-  )
-    .then((r) => r.json())
-    .then(console.log);
-
   return (
     <>
       <SEO
@@ -46,12 +18,12 @@ export function HomePage() {
       <section className="space-y-10 py-8">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-6 lg:space-y-0">
           <div>
-            <h1 className="text-4xl font-extrabold text-gray-900 mb-3 leading-tight">
+            <h1 className="text-4xl font-extrabold mb-3 leading-tight">
               {showRescueOnly
                 ? "🚨 Ratuj plony i wspieraj rolników"
                 : "Znajdź lokalnych rolników i świeże plony"}
             </h1>
-            <p className="text-lg text-gray-600 max-w-2xl">
+            <p className="text-lg text-muted-foreground max-w-2xl">
               {showRescueOnly
                 ? "Pomóż rolnikom w potrzebie, ratuj żywność przed zmarnowaniem i wspieraj polskie gospodarstwa rolne."
                 : "Odkryj lokalne gospodarstwa rolne, kupuj świeże produkty bezpośrednio od rolników i wspieraj wieś w swojej okolicy."}
@@ -86,11 +58,11 @@ export function HomePage() {
           <Card className="bg-green-50 border-none">
             <CardHeader className="text-center">
               <div className="text-3xl mb-2">🌱</div>
-              <h3 className="font-semibold text-gray-900">
+              <h3 className="font-semibold text-muted-foreground">
                 Świeże produkty od rolników
               </h3>
             </CardHeader>
-            <CardContent className="text-center text-gray-600 text-sm">
+            <CardContent className="text-center text-muted-foreground text-sm">
               Kupuj warzywa, owoce i zboża bezpośrednio z gospodarstw rolnych w
               Twojej okolicy.
             </CardContent>
@@ -99,11 +71,11 @@ export function HomePage() {
           <Card className="bg-red-50 border-none">
             <CardHeader className="text-center">
               <div className="text-3xl mb-2">🚨</div>
-              <h3 className="font-semibold text-gray-900">
+              <h3 className="font-semibold text-muted-foreground">
                 Ratuj plony i pomagaj
               </h3>
             </CardHeader>
-            <CardContent className="text-center text-gray-600 text-sm">
+            <CardContent className="text-center text-muted-foreground text-sm">
               Dołącz do akcji ratunkowych i pomóż ograniczyć marnowanie żywności
               wśród lokalnych gospodarstw.
             </CardContent>
@@ -112,18 +84,18 @@ export function HomePage() {
           <Card className="bg-blue-50 border-none">
             <CardHeader className="text-center">
               <div className="text-3xl mb-2">🤝</div>
-              <h3 className="font-semibold text-gray-900">
+              <h3 className="font-semibold text-muted-foreground">
                 Wspieraj lokalne gospodarstwa
               </h3>
             </CardHeader>
-            <CardContent className="text-center text-gray-600 text-sm">
+            <CardContent className="text-center text-muted-foreground text-sm">
               Pomóż rolnikom rozwijać swoje gospodarstwa, kupując bezpośrednio u
               źródła.
             </CardContent>
           </Card>
         </div>
 
-        <section className="mt-12 text-center text-gray-600 text-sm max-w-3xl mx-auto leading-relaxed">
+        <section className="mt-12 text-center text-muted-foreground text-sm max-w-3xl mx-auto leading-relaxed">
           <p>
             <strong>RatujPlon</strong> to platforma wspierająca polskich
             rolników i lokalne społeczności. Dzięki interaktywnej mapie

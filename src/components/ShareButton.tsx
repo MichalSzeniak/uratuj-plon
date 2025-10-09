@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { Logo } from "./Logo";
+import { Share } from "lucide-react";
 
 interface ShareButtonProps {
   listing: any;
@@ -54,7 +55,7 @@ export function ShareButton({ listing, className }: ShareButtonProps) {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild className={className}>
         <Button variant="outline" size="sm">
-          📤 Udostępnij
+          <Share /> Udostępnij
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-md">
@@ -73,7 +74,7 @@ export function ShareButton({ listing, className }: ShareButtonProps) {
               />
             )}
             <h3 className="font-semibold text-lg mb-1">{listing.title}</h3>
-            <p className="text-gray-600 text-sm mb-2 line-clamp-2">
+            <p className="text-muted-foreground text-sm mb-2 line-clamp-2">
               {listing.description}
             </p>
             <div className="flex justify-between items-center text-xs text-gray-500">

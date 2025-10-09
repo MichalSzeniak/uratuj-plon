@@ -43,10 +43,7 @@ export function ListingContact({ listing }: ListingContactProps) {
         <h3 className="font-semibold mb-4">💬 Skontaktuj się</h3>
 
         <div className="space-y-3">
-          <Button
-            className="w-full bg-green-600 hover:bg-green-700"
-            onClick={() => handleMail()}
-          >
+          <Button className="w-full" onClick={() => handleMail()}>
             📧 Wyślij wiadomość
           </Button>
 
@@ -71,7 +68,7 @@ export function ListingContact({ listing }: ListingContactProps) {
             </>
           )}
 
-          <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+          <div className="flex justify-between items-center p-3 bg-secondary rounded-lg">
             <span>Numer telefonu:</span>
             <span className="font-mono">{phone}</span>
             <Button variant="ghost" size="sm" onClick={handleCopyNumber}>

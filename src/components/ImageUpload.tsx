@@ -116,7 +116,7 @@ export function ImageUpload({
       {/* Aktualne zdjęcie */}
       {currentImage && (
         <div>
-          <h4 className="text-sm font-medium text-gray-700 mb-3">
+          <h4 className="text-sm font-medium text-muted-foreground mb-3">
             Aktualne zdjęcie
           </h4>
           <Card className="relative group max-w-xs">
@@ -146,7 +146,7 @@ export function ImageUpload({
       {/* Nowe zdjęcie */}
       {newFile && (
         <div>
-          <h4 className="text-sm font-medium text-gray-700 mb-3">
+          <h4 className="text-sm font-medium text-muted-foreground mb-3">
             Nowe zdjęcie
           </h4>
           <Card className="relative group max-w-xs">
@@ -194,7 +194,7 @@ export function ImageUpload({
               {isCompressing ? (
                 <div className="space-y-2">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto"></div>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-muted-foreground">
                     Kompresowanie zdjęcia...
                   </p>
                 </div>

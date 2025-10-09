@@ -94,7 +94,7 @@ export function RescueFilters({
           variant="ghost"
           size="sm"
           onClick={() => setShowAdvanced(!showAdvanced)}
-          className="p-0 h-auto text-sm text-gray-600 hover:text-gray-900"
+          className="p-0 h-auto text-sm text-muted-foreground hover:text-muted-foreground"
         >
           {showAdvanced ? "▲" : "▼"} Filtry zaawansowane
         </Button>

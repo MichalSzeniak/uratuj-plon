@@ -28,16 +28,16 @@ export class ErrorBoundary extends Component<Props, State> {
       return (
         <div className="min-h-screen flex items-center justify-center ">
           <div className="max-w-md w-full text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            <h1 className="text-2xl font-bold text-muted-foreground mb-4">
               Coś poszło nie tak
             </h1>
-            <p className="text-gray-600 mb-6">
+            <p className="text-muted-foreground mb-6">
               Przepraszamy, wystąpił nieoczekiwany błąd. Spróbuj odświeżyć
               stronę.
             </p>
             <button
               onClick={() => window.location.reload()}
-              className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600"
+              className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-primary"
             >
               Odśwież stronę
             </button>

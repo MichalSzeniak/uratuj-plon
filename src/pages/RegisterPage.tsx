@@ -71,10 +71,10 @@ export function RegisterPage() {
           <div className="mx-auto h-12 w-12 bg-green-500 rounded-full flex items-center justify-center">
             <span className="text-white font-bold">F</span>
           </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-muted-foreground">
             Dołącz do <Logo />
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-center text-sm text-muted-foreground">
             Stwórz konto i zacznij korzystać z platformy
           </p>
         </div>
@@ -83,7 +83,7 @@ export function RegisterPage() {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-muted-foreground"
             >
               Email *
             </label>
@@ -93,7 +93,7 @@ export function RegisterPage() {
               type="email"
               autoComplete="email"
               required
-              className="mt-1 relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-green-500 focus:border-green-500"
+              className="mt-1 relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-muted-foreground rounded-lg focus:outline-none focus:ring-green-500 focus:border-green-500"
               placeholder="adres@email.com"
               value={formData.email}
               onChange={handleChange}
@@ -104,7 +104,7 @@ export function RegisterPage() {
           <div>
             <label
               htmlFor="username"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-muted-foreground"
             >
               Nazwa użytkownika
             </label>
@@ -113,7 +113,7 @@ export function RegisterPage() {
               name="username"
               type="text"
               autoComplete="username"
-              className="mt-1 relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-green-500 focus:border-green-500"
+              className="mt-1 relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-muted-foreground rounded-lg focus:outline-none focus:ring-green-500 focus:border-green-500"
               placeholder="twój_nick"
               value={formData.username}
               onChange={handleChange}
@@ -124,7 +124,7 @@ export function RegisterPage() {
           <div>
             <label
               htmlFor="full_name"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-muted-foreground"
             >
               Imię i nazwisko
             </label>
@@ -133,7 +133,7 @@ export function RegisterPage() {
               name="full_name"
               type="text"
               autoComplete="name"
-              className="mt-1 relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-green-500 focus:border-green-500"
+              className="mt-1 relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-muted-foreground rounded-lg focus:outline-none focus:ring-green-500 focus:border-green-500"
               placeholder="Jan Kowalski"
               value={formData.full_name}
               onChange={handleChange}
@@ -144,7 +144,7 @@ export function RegisterPage() {
           <div>
             <label
               htmlFor="role"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-muted-foreground"
             >
               Kim jesteś? *
             </label>
@@ -172,7 +172,7 @@ export function RegisterPage() {
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-muted-foreground"
             >
               Hasło *
             </label>
@@ -182,7 +182,7 @@ export function RegisterPage() {
               type="password"
               autoComplete="new-password"
               required
-              className="mt-1 relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-green-500 focus:border-green-500"
+              className="mt-1 relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-muted-foreground rounded-lg focus:outline-none focus:ring-green-500 focus:border-green-500"
               placeholder="Minimum 6 znaków"
               value={formData.password}
               onChange={handleChange}
@@ -193,7 +193,7 @@ export function RegisterPage() {
           <div>
             <label
               htmlFor="confirmPassword"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-muted-foreground"
             >
               Potwierdź hasło *
             </label>
@@ -203,7 +203,7 @@ export function RegisterPage() {
               type="password"
               autoComplete="new-password"
               required
-              className="mt-1 relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-green-500 focus:border-green-500"
+              className="mt-1 relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-muted-foreground rounded-lg focus:outline-none focus:ring-green-500 focus:border-green-500"
               placeholder="Powtórz hasło"
               value={formData.confirmPassword}
               onChange={handleChange}
@@ -215,7 +215,7 @@ export function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 transition-colors"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary bg-primary-foreground focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 transition-colors"
             >
               {loading ? "Rejestracja..." : "Zarejestruj się"}
             </button>
@@ -235,7 +235,7 @@ export function RegisterPage() {
         </form>
 
         <div className="text-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-muted-foreground">
             Masz już konto?{" "}
             <Link
               to="/login"

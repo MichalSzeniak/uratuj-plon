@@ -40,7 +40,7 @@ export function PendingListingCard({
             {/* Nagłówek */}
             <div className="flex items-start justify-between">
               <div>
-                <h3 className="font-semibold text-lg text-gray-900 mb-1">
+                <h3 className="font-semibold text-lg text-muted-foreground mb-1">
                   {listing.title}
                 </h3>
                 <div className="flex items-center gap-2 flex-wrap">
@@ -68,7 +68,7 @@ export function PendingListingCard({
               </div>
 
               <div className="text-right">
-                <p className="text-lg font-bold text-gray-900">
+                <p className="text-lg font-bold text-muted-foreground">
                   {listing.price_per_unit
                     ? `${listing.price_per_unit} zł/${listing.unit}`
                     : "Za darmo"}
@@ -82,7 +82,7 @@ export function PendingListingCard({
 
             {/* Opis */}
             {listing.description && (
-              <p className="text-gray-700 bg-gray-50 p-3 rounded-lg">
+              <p className="text-muted-foreground  p-3 rounded-lg">
                 {listing.description}
               </p>
             )}
@@ -90,13 +90,13 @@ export function PendingListingCard({
             {/* Metadane */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <MapPin className="h-4 w-4" />
                   <span>{listing.address}</span>
                 </div>
 
                 {listing.available_until && (
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Calendar className="h-4 w-4" />
                     <span>
                       Ważne do:{" "}
@@ -112,17 +112,17 @@ export function PendingListingCard({
                 {/* Dane użytkownika lub gościa */}
                 {isGuestListing ? (
                   <>
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Mail className="h-4 w-4" />
                       <span>{listing.guest_contact_email}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Phone className="h-4 w-4" />
                       <span>{listing.contact_phone}</span>
                     </div>
                   </>
                 ) : (
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <User className="h-4 w-4" />
                     <span>
                       {listing.profiles?.full_name ||
@@ -151,7 +151,7 @@ export function PendingListingCard({
             <Button
               onClick={onApprove}
               disabled={isApproving || isRejecting}
-              className="bg-green-600 hover:bg-green-700"
+              className="bg-primary bg-primary-foreground"
             >
               {isApproving ? (
                 <div className="animate-spin h-4 w-4 border-b-2 border-white rounded-full" />

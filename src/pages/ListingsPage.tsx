@@ -7,10 +7,10 @@ export function ListingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-muted-foreground mb-2">
           Ogłoszenia Gospodarstw
         </h1>
-        <p className="text-lg text-gray-600">
+        <p className="text-lg text-muted-foreground">
           Znajdź świeże produkty prosto od rolników
         </p>
       </div>

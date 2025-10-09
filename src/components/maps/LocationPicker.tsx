@@ -220,7 +220,7 @@ export function LocationPicker({
   return (
     <div className="space-y-3 ">
       <div className="space-y-2">
-        <label className="text-sm font-medium text-gray-700">
+        <label className="text-sm font-medium text-muted-foreground">
           🔍 Wyszukaj adres
         </label>
         <div className="flex gap-2">
@@ -245,7 +245,7 @@ export function LocationPicker({
         </p>
       </div>
 
-      <div className="text-sm text-gray-600 bg-blue-50 p-3 rounded-lg">
+      <div className="text-sm text-muted-foreground bg-blue-50 p-3 rounded-lg">
         <p className="font-medium">🗺️ Jak ustawić lokalizację:</p>
         <ol className="list-decimal list-inside space-y-1 mt-1">
           <li>
@@ -284,7 +284,7 @@ export function LocationPicker({
       </div>
 
       {selectedLocation && (
-        <div className="text-sm text-gray-700 p-3 bg-green-50 rounded-lg">
+        <div className="text-sm text-muted-foreground p-3 bg-green-50 rounded-lg">
           <p className="font-medium">✅ Lokalizacja wybrana</p>
           <p className="font-semibold mb-1">
             {addressInput || "Adres nieznany"}
