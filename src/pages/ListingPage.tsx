@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +10,7 @@ import { ListingGallery } from "@/components/listing/ListingGallery";
 import { ListingContact } from "@/components/listing/ListingContact";
 import { MapNavigation } from "@/components/listing/MapNavigation";
 import { ArrowLeft, Package } from "lucide-react";
-// import SEO from "@/components/SEO";
+import SEO from "@/components/SEO";
 
 interface Listing {
   id: string;
@@ -39,13 +39,13 @@ interface Listing {
 }
 
 export function ListingPage() {
-  // const location = useLocation();
+  const location = useLocation();
   const { id } = useParams<{ id: string }>();
   const [listing, setListing] = useState<Listing | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // const currentUrl = `https://ratujplon.pl${location.pathname}`;
+  const currentUrl = `https://ratujplon.pl${location.pathname}`;
 
   useEffect(() => {
     fetchListing();
@@ -131,11 +131,11 @@ export function ListingPage() {
 
   return (
     <>
-      {/* <SEO
+      <SEO
         url={currentUrl}
         title={`Ratuj plon - ${listing.title} w ${listing.address} | Kup lub oddaj plony`}
         description={`Rolnik z ${listing.address} oferuje ${listing.title}. Kupuj lokalnie lub przekaż nadwyżki plonów i wspieraj lokalne gospodarstwa. Sprawdź ofertę na Ratuj plon!`}
-      /> */}
+      />
 
       <section className="min-h-screen bg-gray-50">
         <div className="bg-white border-b sticky top-0 z-10">
