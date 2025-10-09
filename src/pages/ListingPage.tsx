@@ -40,13 +40,13 @@ interface Listing {
 }
 
 export function ListingPage() {
-  const location = useLocation();
+  // const location = useLocation();
   const { id } = useParams<{ id: string }>();
   const [listing, setListing] = useState<Listing | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const currentUrl = `https://ratujplon.pl${location.pathname}`;
+  // const currentUrl = `https://ratujplon.pl${location.pathname}`;
 
   useEffect(() => {
     fetchListing();
